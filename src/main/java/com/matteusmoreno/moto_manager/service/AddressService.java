@@ -26,6 +26,11 @@ public class AddressService {
     @Transactional
     public Address createAddress(String zipcode, String number, String complement) {
 
+        Address existingAddress = addressRepository.findByZipcodeAndNumber(zipcode, number);
+        if (existingAddress != null) {
+            return existingAddress;
+        }
+
         ViaCepResponse viaCepResponse = viaCepClient.getAddressByZipcode(zipcode);
 
         Address address = addressMapper.setAddressAttributes(viaCepResponse, number, complement);

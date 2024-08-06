@@ -24,9 +24,16 @@ public class Customer {
     private LocalDate birthDate;
     private Integer age;
     private String phone;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Address> address = new ArrayList<>();
-    @OneToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "customers_addresses",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id"))
+    private List<Address> addresses = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "customers_motorcycles",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "motorcycle_id"))
     private List<Motorcycle> motorcycles = new ArrayList<>();
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

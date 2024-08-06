@@ -3,7 +3,7 @@ CREATE TABLE motorcycles (
     brand VARCHAR(50) NOT NULL,
     model VARCHAR(255) NOT NULL,
     color VARCHAR(50) NOT NULL,
-    plate VARCHAR(10) UNIQUE NOT NULL,
+    plate VARCHAR(10) NOT NULL UNIQUE,
     year VARCHAR(10) NOT NULL,
     created_at TIMESTAMP,
     updated_at TIMESTAMP,

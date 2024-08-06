@@ -16,15 +16,13 @@ public class CustomerMapper {
 
     public Customer setCustomerAttributes(CreateCustomerRequest request, Address address) {
 
-        List<Address> addresses = Collections.singletonList(address);
-
         return Customer.builder()
                 .name(request.name())
                 .email(request.email())
                 .birthDate(request.birthDate())
                 .age(Period.between(request.birthDate(), LocalDate.now()).getYears())
                 .phone(request.phone())
-                .address(addresses)
+                .addresses(List.of(address))
                 .createdAt(LocalDateTime.now())
                 .updatedAt(null)
                 .deletedAt(null)

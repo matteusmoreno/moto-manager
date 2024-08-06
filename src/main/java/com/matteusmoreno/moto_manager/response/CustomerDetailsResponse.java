@@ -2,6 +2,7 @@ package com.matteusmoreno.moto_manager.response;
 
 import com.matteusmoreno.moto_manager.entity.Customer;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +10,8 @@ import java.util.UUID;
 public record CustomerDetailsResponse(
         UUID id,
         String name,
+        LocalDate birthDate,
+        Integer age,
         String email,
         String phone,
         List<AddressDetailsResponse> addresses,
@@ -21,9 +24,11 @@ public record CustomerDetailsResponse(
         this(
                 customer.getId(),
                 customer.getName(),
+                customer.getBirthDate(),
+                customer.getAge(),
                 customer.getEmail(),
                 customer.getPhone(),
-                customer.getAddress().stream().map(AddressDetailsResponse::new).toList(),
+                customer.getAddresses().stream().map(AddressDetailsResponse::new).toList(),
                 customer.getCreatedAt(),
                 customer.getUpdatedAt(),
                 customer.getDeletedAt(),
