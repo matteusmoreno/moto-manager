@@ -1,0 +1,32 @@
+package com.matteusmoreno.moto_manager.response;
+
+import com.matteusmoreno.moto_manager.entity.Customer;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+public record CustomerDetailsResponse(
+        UUID id,
+        String name,
+        String email,
+        String phone,
+        List<AddressDetailsResponse> addresses,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt,
+        LocalDateTime deletedAt,
+        Boolean active) {
+
+    public CustomerDetailsResponse(Customer customer) {
+        this(
+                customer.getId(),
+                customer.getName(),
+                customer.getEmail(),
+                customer.getPhone(),
+                customer.getAddress().stream().map(AddressDetailsResponse::new).toList(),
+                customer.getCreatedAt(),
+                customer.getUpdatedAt(),
+                customer.getDeletedAt(),
+                customer.isActive());
+    }
+}
