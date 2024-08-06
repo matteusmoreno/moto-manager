@@ -6,7 +6,10 @@ import com.matteusmoreno.moto_manager.mapper.CustomerMapper;
 import com.matteusmoreno.moto_manager.mapper.EmployeeMapper;
 import com.matteusmoreno.moto_manager.repository.EmployeeRepository;
 import com.matteusmoreno.moto_manager.request.CreateEmployeeRequest;
+import com.matteusmoreno.moto_manager.response.EmployeeDetailsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,5 +35,9 @@ public class EmployeeService {
         employeeRepository.save(employee);
 
         return employee;
+    }
+
+    public Page<EmployeeDetailsResponse> findAllEmployees(Pageable pageable) {
+        return employeeRepository.findAll(pageable).map(EmployeeDetailsResponse::new);
     }
 }
