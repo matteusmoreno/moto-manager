@@ -26,9 +26,8 @@ public class AddressService {
     @Transactional
     public Address createAddress(String zipcode, String number, String complement) {
 
-        Address existingAddress = addressRepository.findByZipcodeAndNumber(zipcode, number);
-        if (existingAddress != null) {
-            return existingAddress;
+        if (addressRepository.existsByZipcodeAndNumber(zipcode, number)) {
+            return addressRepository.findByZipcodeAndNumber(zipcode, number);
         }
 
         ViaCepResponse viaCepResponse = viaCepClient.getAddressByZipcode(zipcode);

@@ -5,7 +5,10 @@ import com.matteusmoreno.moto_manager.entity.Customer;
 import com.matteusmoreno.moto_manager.mapper.CustomerMapper;
 import com.matteusmoreno.moto_manager.repository.CustomerRepository;
 import com.matteusmoreno.moto_manager.request.CreateCustomerRequest;
+import com.matteusmoreno.moto_manager.response.CustomerDetailsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,5 +35,9 @@ public class CustomerService {
         customerRepository.save(customer);
 
         return customer;
+    }
+
+    public Page<CustomerDetailsResponse> findAllCustomers(Pageable pageable) {
+        return customerRepository.findAll(pageable).map(CustomerDetailsResponse::new);
     }
 }
