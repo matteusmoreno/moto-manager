@@ -1,0 +1,9 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: moto_manager_database
+    restart: unless-stopped
+    env_file:
+      - env/mysql.env
+    ports:
+      - "3306:3306"
