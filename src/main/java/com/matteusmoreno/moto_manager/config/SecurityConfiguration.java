@@ -51,6 +51,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/employees/enable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
 
                         .requestMatchers("/motorcycles/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
+                        .requestMatchers("/motorcycles/find-all").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
 
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
