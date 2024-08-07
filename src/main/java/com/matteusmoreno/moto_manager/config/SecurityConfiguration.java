@@ -53,6 +53,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/motorcycles/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
                         .requestMatchers("/motorcycles/find-all").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
                         .requestMatchers("/motorcycles/update").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
+                        .requestMatchers("/motorcycles/disable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
+                        .requestMatchers("/motorcycles/enable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
 
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)

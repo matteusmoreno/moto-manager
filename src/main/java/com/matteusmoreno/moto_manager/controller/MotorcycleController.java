@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/motorcycles")
@@ -45,6 +46,20 @@ public class MotorcycleController {
     @PutMapping("/update")
     public ResponseEntity<MotorcycleDetailsResponse> update(@RequestBody @Valid UpdateMotorcycleRequest request) {
         Motorcycle motorcycle = motorcycleService.updateMotorcycle(request);
+
+        return ResponseEntity.ok(new MotorcycleDetailsResponse(motorcycle));
+    }
+
+    @DeleteMapping("/disable/{id}")
+    public ResponseEntity<Void> disable(@PathVariable UUID id) {
+        motorcycleService.disableMotorcycle(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/enable/{id}")
+    public ResponseEntity<MotorcycleDetailsResponse> enable(@PathVariable UUID id) {
+        Motorcycle motorcycle = motorcycleService.enableMotorcycle(id);
 
         return ResponseEntity.ok(new MotorcycleDetailsResponse(motorcycle));
     }
