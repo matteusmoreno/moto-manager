@@ -3,18 +3,18 @@ package com.matteusmoreno.moto_manager.mapper;
 import com.matteusmoreno.moto_manager.entity.Address;
 import com.matteusmoreno.moto_manager.entity.Customer;
 import com.matteusmoreno.moto_manager.request.CreateCustomerRequest;
+import com.matteusmoreno.moto_manager.request.UpdateCustomerRequest;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.util.Collections;
 import java.util.List;
 
 @Component
 public class CustomerMapper {
 
-    public Customer setCustomerAttributes(CreateCustomerRequest request, Address address) {
+    public Customer mapToCustomerForCreation(CreateCustomerRequest request, Address address) {
 
         return Customer.builder()
                 .name(request.name())

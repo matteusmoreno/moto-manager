@@ -2,6 +2,7 @@ package com.matteusmoreno.moto_manager.controller;
 
 import com.matteusmoreno.moto_manager.entity.Customer;
 import com.matteusmoreno.moto_manager.request.CreateCustomerRequest;
+import com.matteusmoreno.moto_manager.request.UpdateCustomerRequest;
 import com.matteusmoreno.moto_manager.response.CustomerDetailsResponse;
 import com.matteusmoreno.moto_manager.service.CustomerService;
 import jakarta.validation.Valid;
@@ -35,9 +36,17 @@ public class CustomerController {
     }
 
     @GetMapping("/find-all")
-    private ResponseEntity<Page<CustomerDetailsResponse>> findAllCustomers(@PageableDefault(sort = "name", size = 10) Pageable pageable) {
+    public ResponseEntity<Page<CustomerDetailsResponse>> findAllCustomers(@PageableDefault(sort = "name", size = 10) Pageable pageable) {
         Page<CustomerDetailsResponse> page = customerService.findAllCustomers(pageable);
 
         return ResponseEntity.ok(page);
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<CustomerDetailsResponse> update(@RequestBody @Valid UpdateCustomerRequest request) {
+        Customer customer = customerService.updateCustomer(request);
+
+        return ResponseEntity.ok(new CustomerDetailsResponse(customer));
+    }
+
 }
