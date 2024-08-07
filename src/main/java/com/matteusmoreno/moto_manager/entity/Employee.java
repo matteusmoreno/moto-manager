@@ -26,6 +26,7 @@ public class Employee {
     private LocalDate birthDate;
     private Integer age;
     private String cpf;
+    @Enumerated(EnumType.STRING)
     private Role role;
     @ManyToOne
     private Address address;

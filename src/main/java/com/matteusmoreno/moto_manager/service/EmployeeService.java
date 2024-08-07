@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.UUID;
 
 @Service
 public class EmployeeService {
@@ -61,6 +62,29 @@ public class EmployeeService {
         if (request.cpf() != null) employee.setCpf(request.cpf());
 
         employee.setUpdatedAt(LocalDateTime.now());
+        employeeRepository.save(employee);
+
+        return employee;
+    }
+
+    @Transactional
+    public void disableEmployee(UUID id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+
+        employee.setActive(false);
+        employee.setDeletedAt(LocalDateTime.now());
+        employeeRepository.save(employee);
+    }
+
+    @Transactional
+    public Employee enableEmployee(UUID id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+
+        employee.setActive(true);
+        employee.setUpdatedAt(LocalDateTime.now());
+        employee.setDeletedAt(null);
         employeeRepository.save(employee);
 
         return employee;

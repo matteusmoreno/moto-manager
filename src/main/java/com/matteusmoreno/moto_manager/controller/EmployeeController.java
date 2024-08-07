@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/employees")
@@ -45,6 +46,20 @@ public class EmployeeController {
     @PutMapping("/update")
     public ResponseEntity<EmployeeDetailsResponse> update(@RequestBody @Valid UpdateEmployeeRequest request) {
         Employee employee = employeeService.updateEmployee(request);
+
+        return ResponseEntity.ok(new EmployeeDetailsResponse(employee));
+    }
+
+    @DeleteMapping("/disable/{id}")
+    public ResponseEntity<Void> disable(@PathVariable UUID id) {
+        employeeService.disableEmployee(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/enable/{id}")
+    public ResponseEntity<EmployeeDetailsResponse> enable(@PathVariable UUID id) {
+        Employee employee = employeeService.enableEmployee(id);
 
         return ResponseEntity.ok(new EmployeeDetailsResponse(employee));
     }
