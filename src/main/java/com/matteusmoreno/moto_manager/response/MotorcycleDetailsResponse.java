@@ -10,9 +10,9 @@ import java.util.UUID;
 
 public record MotorcycleDetailsResponse(
         UUID id,
-        MotorcycleBrand motorcycleBrand,
+        MotorcycleBrand brand,
         String model,
-        MotorcycleColor motorcycleColor,
+        MotorcycleColor color,
         String plate,
         String year,
         Customer customer,

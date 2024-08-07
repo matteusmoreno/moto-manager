@@ -2,6 +2,7 @@ package com.matteusmoreno.moto_manager.controller;
 
 import com.matteusmoreno.moto_manager.entity.Motorcycle;
 import com.matteusmoreno.moto_manager.request.CreateMotorcycleRequest;
+import com.matteusmoreno.moto_manager.request.UpdateMotorcycleRequest;
 import com.matteusmoreno.moto_manager.response.MotorcycleDetailsResponse;
 import com.matteusmoreno.moto_manager.service.MotorcycleService;
 import jakarta.validation.Valid;
@@ -39,5 +40,12 @@ public class MotorcycleController {
         Page<MotorcycleDetailsResponse> page = motorcycleService.findAllMotorcycles(pageable);
 
         return ResponseEntity.ok(page);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<MotorcycleDetailsResponse> update(@RequestBody @Valid UpdateMotorcycleRequest request) {
+        Motorcycle motorcycle = motorcycleService.updateMotorcycle(request);
+
+        return ResponseEntity.ok(new MotorcycleDetailsResponse(motorcycle));
     }
 }

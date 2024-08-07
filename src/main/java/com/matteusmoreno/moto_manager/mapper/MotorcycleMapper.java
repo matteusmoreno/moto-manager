@@ -12,9 +12,9 @@ public class MotorcycleMapper {
     public Motorcycle mapToMotorcycleForCreation(CreateMotorcycleRequest request)
     {
         return Motorcycle.builder()
-                .brand(request.motorcycleBrand())
+                .brand(request.brand())
                 .model(request.model().toUpperCase())
-                .color(request.motorcycleColor())
+                .color(request.color())
                 .plate(request.plate().toUpperCase().replaceAll("\\s+", ""))
                 .year(request.year())
                 .createdAt(LocalDateTime.now())
