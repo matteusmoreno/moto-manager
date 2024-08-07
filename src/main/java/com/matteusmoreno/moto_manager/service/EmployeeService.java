@@ -2,7 +2,6 @@ package com.matteusmoreno.moto_manager.service;
 
 import com.matteusmoreno.moto_manager.entity.Address;
 import com.matteusmoreno.moto_manager.entity.Employee;
-import com.matteusmoreno.moto_manager.mapper.CustomerMapper;
 import com.matteusmoreno.moto_manager.mapper.EmployeeMapper;
 import com.matteusmoreno.moto_manager.repository.EmployeeRepository;
 import com.matteusmoreno.moto_manager.request.CreateEmployeeRequest;
