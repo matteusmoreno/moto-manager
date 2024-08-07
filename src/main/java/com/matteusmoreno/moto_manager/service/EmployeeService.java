@@ -5,12 +5,18 @@ import com.matteusmoreno.moto_manager.entity.Employee;
 import com.matteusmoreno.moto_manager.mapper.EmployeeMapper;
 import com.matteusmoreno.moto_manager.repository.EmployeeRepository;
 import com.matteusmoreno.moto_manager.request.CreateEmployeeRequest;
+import com.matteusmoreno.moto_manager.request.UpdateEmployeeRequest;
 import com.matteusmoreno.moto_manager.response.EmployeeDetailsResponse;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
 
 @Service
 public class EmployeeService {
@@ -38,5 +44,25 @@ public class EmployeeService {
 
     public Page<EmployeeDetailsResponse> findAllEmployees(Pageable pageable) {
         return employeeRepository.findAll(pageable).map(EmployeeDetailsResponse::new);
+    }
+
+    @Transactional
+    public Employee updateEmployee(UpdateEmployeeRequest request) {
+        Employee employee = employeeRepository.findById(request.id())
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+
+        if (request.name() != null) employee.setName(request.name());
+        if (request.email() != null) employee.setEmail(request.email());
+        if (request.phone() != null) employee.setPhone(request.phone());
+        if (request.birthDate() != null) {
+            employee.setBirthDate(request.birthDate());
+            employee.setAge(Period.between(request.birthDate(), LocalDate.now()).getYears());
+        }
+        if (request.cpf() != null) employee.setCpf(request.cpf());
+
+        employee.setUpdatedAt(LocalDateTime.now());
+        employeeRepository.save(employee);
+
+        return employee;
     }
 }

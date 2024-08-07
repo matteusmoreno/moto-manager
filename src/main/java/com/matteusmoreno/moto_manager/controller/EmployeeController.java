@@ -2,6 +2,7 @@ package com.matteusmoreno.moto_manager.controller;
 
 import com.matteusmoreno.moto_manager.entity.Employee;
 import com.matteusmoreno.moto_manager.request.CreateEmployeeRequest;
+import com.matteusmoreno.moto_manager.request.UpdateEmployeeRequest;
 import com.matteusmoreno.moto_manager.response.EmployeeDetailsResponse;
 import com.matteusmoreno.moto_manager.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -39,5 +40,12 @@ public class EmployeeController {
         Page<EmployeeDetailsResponse> page = employeeService.findAllEmployees(pageable);
 
         return ResponseEntity.ok(page);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<EmployeeDetailsResponse> update(@RequestBody @Valid UpdateEmployeeRequest request) {
+        Employee employee = employeeService.updateEmployee(request);
+
+        return ResponseEntity.ok(new EmployeeDetailsResponse(employee));
     }
 }
