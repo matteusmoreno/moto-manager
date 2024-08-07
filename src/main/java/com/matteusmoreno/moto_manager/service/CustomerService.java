@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.UUID;
 
 @Service
 public class CustomerService {
@@ -60,6 +61,29 @@ public class CustomerService {
         }
         if (request.phone() != null) customer.setPhone(request.phone());
 
+        customer.setUpdatedAt(LocalDateTime.now());
+        customerRepository.save(customer);
+
+        return customer;
+    }
+
+    @Transactional
+    public void disableCustomer(UUID id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+
+        customer.setActive(false);
+        customer.setDeletedAt(LocalDateTime.now());
+        customerRepository.save(customer);
+    }
+
+    @Transactional
+    public Customer enableCustomer(UUID id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+
+        customer.setActive(true);
+        customer.setDeletedAt(null);
         customer.setUpdatedAt(LocalDateTime.now());
         customerRepository.save(customer);
 
