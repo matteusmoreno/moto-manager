@@ -39,4 +39,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleAddressAlreadyAssignedToCustomerException(AddressAlreadyAssignedToCustomerException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(InvalidZipcodeException.class)
+    public ResponseEntity<String> handleInvalidZipcodeException(InvalidZipcodeException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
