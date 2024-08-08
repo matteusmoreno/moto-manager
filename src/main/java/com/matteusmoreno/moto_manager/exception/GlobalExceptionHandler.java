@@ -34,4 +34,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleMotorcycleNotAssignedToCustomerException(MotorcycleNotOwnedByCustomerException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(AddressAlreadyAssignedToCustomerException.class)
+    public ResponseEntity<String> handleAddressAlreadyAssignedToCustomerException(AddressAlreadyAssignedToCustomerException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
 }

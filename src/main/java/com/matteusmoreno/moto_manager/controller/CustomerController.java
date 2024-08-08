@@ -1,6 +1,7 @@
 package com.matteusmoreno.moto_manager.controller;
 
 import com.matteusmoreno.moto_manager.entity.Customer;
+import com.matteusmoreno.moto_manager.request.AddressCustomerRequest;
 import com.matteusmoreno.moto_manager.request.MotorcycleCustomerRequest;
 import com.matteusmoreno.moto_manager.request.CreateCustomerRequest;
 import com.matteusmoreno.moto_manager.request.UpdateCustomerRequest;
@@ -79,6 +80,14 @@ public class CustomerController {
         Customer customer = customerService.removeMotorcycle(request);
 
         return ResponseEntity.ok(new CustomerMotorcyclesResponse(customer));
+    }
+
+    @PostMapping("/add-address")
+    public ResponseEntity<CustomerDetailsResponse> addAddress(@RequestBody @Valid AddressCustomerRequest request, UriComponentsBuilder uriBuilder) {
+        Customer customer = customerService.addAddress(request);
+        URI uri = uriBuilder.path("/customers/add-address/{id}").buildAndExpand(customer.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(new CustomerDetailsResponse(customer));
     }
 
 }

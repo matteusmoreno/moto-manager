@@ -3,11 +3,13 @@ package com.matteusmoreno.moto_manager.service;
 import com.matteusmoreno.moto_manager.entity.Address;
 import com.matteusmoreno.moto_manager.entity.Customer;
 import com.matteusmoreno.moto_manager.entity.Motorcycle;
+import com.matteusmoreno.moto_manager.exception.AddressAlreadyAssignedToCustomerException;
 import com.matteusmoreno.moto_manager.exception.MotorcycleAlreadyAssignedException;
 import com.matteusmoreno.moto_manager.exception.MotorcycleNotOwnedByCustomerException;
 import com.matteusmoreno.moto_manager.mapper.CustomerMapper;
 import com.matteusmoreno.moto_manager.repository.CustomerRepository;
 import com.matteusmoreno.moto_manager.repository.MotorcycleRepository;
+import com.matteusmoreno.moto_manager.request.AddressCustomerRequest;
 import com.matteusmoreno.moto_manager.request.MotorcycleCustomerRequest;
 import com.matteusmoreno.moto_manager.request.CreateCustomerRequest;
 import com.matteusmoreno.moto_manager.request.UpdateCustomerRequest;
@@ -131,6 +133,21 @@ public class CustomerService {
 
         customerRepository.save(customer);
         motorcycleRepository.save(motorcycle);
+
+        return customer;
+    }
+
+    @Transactional
+    public Customer addAddress(AddressCustomerRequest request) {
+        Customer customer = customerRepository.findById(request.customerId())
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+
+        Address address = addressService.createAddress(request.zipcode(), request.number(), request.complement());
+
+        if (customer.getAddresses().stream().anyMatch(a -> a.equals(address))) throw new AddressAlreadyAssignedToCustomerException();
+
+        customer.getAddresses().add(address);
+        customerRepository.save(customer);
 
         return customer;
     }
