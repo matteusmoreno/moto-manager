@@ -43,6 +43,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/customers/update").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
                         .requestMatchers("/customers/disable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
                         .requestMatchers("/customers/enable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
+                        .requestMatchers("/customers/add-motorcycle").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
+                        .requestMatchers("/customers/remove-motorcycle").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
 
                         .requestMatchers("/employees/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
                         .requestMatchers("/employees/find-all").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")

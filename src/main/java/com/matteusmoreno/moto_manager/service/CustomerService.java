@@ -4,6 +4,7 @@ import com.matteusmoreno.moto_manager.entity.Address;
 import com.matteusmoreno.moto_manager.entity.Customer;
 import com.matteusmoreno.moto_manager.entity.Motorcycle;
 import com.matteusmoreno.moto_manager.exception.MotorcycleAlreadyAssignedException;
+import com.matteusmoreno.moto_manager.exception.MotorcycleNotOwnedByCustomerException;
 import com.matteusmoreno.moto_manager.mapper.CustomerMapper;
 import com.matteusmoreno.moto_manager.repository.CustomerRepository;
 import com.matteusmoreno.moto_manager.repository.MotorcycleRepository;
@@ -108,6 +109,25 @@ public class CustomerService {
 
         motorcycle.setCustomer(customer);
         customer.getMotorcycles().add(motorcycle);
+
+        customerRepository.save(customer);
+        motorcycleRepository.save(motorcycle);
+
+        return customer;
+    }
+
+    @Transactional
+    public Customer removeMotorcycle(MotorcycleCustomerRequest request) {
+        Motorcycle motorcycle = motorcycleRepository.findById(request.motorcycleId())
+                .orElseThrow(() -> new EntityNotFoundException("Motorcycle not found"));
+
+        Customer customer = customerRepository.findById(request.customerId())
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+
+        if (motorcycle.getCustomer() == null || !motorcycle.getCustomer().equals(customer)) throw new MotorcycleNotOwnedByCustomerException();
+
+        motorcycle.setCustomer(null);
+        customer.getMotorcycles().remove(motorcycle);
 
         customerRepository.save(customer);
         motorcycleRepository.save(motorcycle);

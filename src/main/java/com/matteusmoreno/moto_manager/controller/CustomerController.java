@@ -74,4 +74,11 @@ public class CustomerController {
         return ResponseEntity.created(uri).body(new CustomerMotorcyclesResponse(customer));
     }
 
+    @DeleteMapping("/remove-motorcycle")
+    public ResponseEntity<CustomerMotorcyclesResponse> removeMotorcycle(@RequestBody @Valid MotorcycleCustomerRequest request) {
+        Customer customer = customerService.removeMotorcycle(request);
+
+        return ResponseEntity.ok(new CustomerMotorcyclesResponse(customer));
+    }
+
 }
