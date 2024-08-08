@@ -2,6 +2,7 @@ package com.matteusmoreno.moto_manager.controller;
 
 import com.matteusmoreno.moto_manager.entity.Product;
 import com.matteusmoreno.moto_manager.request.CreateProductRequest;
+import com.matteusmoreno.moto_manager.request.UpdateProductRequest;
 import com.matteusmoreno.moto_manager.response.ProductDetailsResponse;
 import com.matteusmoreno.moto_manager.service.ProductService;
 import jakarta.validation.Valid;
@@ -39,5 +40,12 @@ public class ProductController {
         Page<ProductDetailsResponse> page = productService.findAllProducts(pageable);
 
         return ResponseEntity.ok(page);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ProductDetailsResponse> update(@RequestBody @Valid UpdateProductRequest request) {
+        Product product = productService.updateProduct(request);
+
+        return ResponseEntity.ok(new ProductDetailsResponse(product));
     }
 }
