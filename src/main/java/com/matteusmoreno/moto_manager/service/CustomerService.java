@@ -2,8 +2,12 @@ package com.matteusmoreno.moto_manager.service;
 
 import com.matteusmoreno.moto_manager.entity.Address;
 import com.matteusmoreno.moto_manager.entity.Customer;
+import com.matteusmoreno.moto_manager.entity.Motorcycle;
+import com.matteusmoreno.moto_manager.exception.MotorcycleAlreadyAssignedException;
 import com.matteusmoreno.moto_manager.mapper.CustomerMapper;
 import com.matteusmoreno.moto_manager.repository.CustomerRepository;
+import com.matteusmoreno.moto_manager.repository.MotorcycleRepository;
+import com.matteusmoreno.moto_manager.request.MotorcycleCustomerRequest;
 import com.matteusmoreno.moto_manager.request.CreateCustomerRequest;
 import com.matteusmoreno.moto_manager.request.UpdateCustomerRequest;
 import com.matteusmoreno.moto_manager.response.CustomerDetailsResponse;
@@ -25,12 +29,14 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
     private final AddressService addressService;
+    private final MotorcycleRepository motorcycleRepository;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper, AddressService addressService) {
+    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper, AddressService addressService, MotorcycleRepository motorcycleRepository) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
         this.addressService = addressService;
+        this.motorcycleRepository = motorcycleRepository;
     }
 
     @Transactional
@@ -86,6 +92,25 @@ public class CustomerService {
         customer.setDeletedAt(null);
         customer.setUpdatedAt(LocalDateTime.now());
         customerRepository.save(customer);
+
+        return customer;
+    }
+
+    @Transactional
+    public Customer addMotorcycle(MotorcycleCustomerRequest request) {
+        Motorcycle motorcycle = motorcycleRepository.findById(request.motorcycleId())
+                .orElseThrow(() -> new EntityNotFoundException("Motorcycle not found"));
+
+        if (motorcycle.getCustomer() != null) throw new MotorcycleAlreadyAssignedException();
+
+        Customer customer = customerRepository.findById(request.customerId())
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+
+        motorcycle.setCustomer(customer);
+        customer.getMotorcycles().add(motorcycle);
+
+        customerRepository.save(customer);
+        motorcycleRepository.save(motorcycle);
 
         return customer;
     }

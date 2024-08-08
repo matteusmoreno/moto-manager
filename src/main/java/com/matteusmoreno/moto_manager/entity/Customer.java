@@ -30,10 +30,7 @@ public class Customer {
             inverseJoinColumns = @JoinColumn(name = "address_id"))
     private List<Address> addresses = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "customers_motorcycles",
-            joinColumns = @JoinColumn(name = "customer_id"),
-            inverseJoinColumns = @JoinColumn(name = "motorcycle_id"))
+    @OneToMany(mappedBy = "customer")
     private List<Motorcycle> motorcycles = new ArrayList<>();
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

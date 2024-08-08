@@ -2,7 +2,6 @@ package com.matteusmoreno.moto_manager.response;
 
 import com.matteusmoreno.moto_manager.constant.MotorcycleBrand;
 import com.matteusmoreno.moto_manager.constant.MotorcycleColor;
-import com.matteusmoreno.moto_manager.entity.Customer;
 import com.matteusmoreno.moto_manager.entity.Motorcycle;
 
 import java.time.LocalDateTime;
@@ -15,7 +14,6 @@ public record MotorcycleDetailsResponse(
         MotorcycleColor color,
         String plate,
         String year,
-        Customer customer,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         LocalDateTime deletedAt,
@@ -29,7 +27,6 @@ public record MotorcycleDetailsResponse(
                 motorcycle.getColor(),
                 motorcycle.getPlate(),
                 motorcycle.getYear(),
-                motorcycle.getCustomer(),
                 motorcycle.getCreatedAt(),
                 motorcycle.getUpdatedAt(),
                 motorcycle.getDeletedAt(),

@@ -1,9 +1,11 @@
 package com.matteusmoreno.moto_manager.controller;
 
 import com.matteusmoreno.moto_manager.entity.Customer;
+import com.matteusmoreno.moto_manager.request.MotorcycleCustomerRequest;
 import com.matteusmoreno.moto_manager.request.CreateCustomerRequest;
 import com.matteusmoreno.moto_manager.request.UpdateCustomerRequest;
 import com.matteusmoreno.moto_manager.response.CustomerDetailsResponse;
+import com.matteusmoreno.moto_manager.response.CustomerMotorcyclesResponse;
 import com.matteusmoreno.moto_manager.service.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +64,14 @@ public class CustomerController {
         Customer customer = customerService.enableCustomer(id);
 
         return ResponseEntity.ok(new CustomerDetailsResponse(customer));
+    }
+
+    @PostMapping("/add-motorcycle")
+    public ResponseEntity<CustomerMotorcyclesResponse> addMotorcycle(@RequestBody @Valid MotorcycleCustomerRequest request, UriComponentsBuilder uriBuilder) {
+        Customer customer = customerService.addMotorcycle(request);
+        URI uri = uriBuilder.path("/customers/add-motorcycle/{id}").buildAndExpand(customer.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(new CustomerMotorcyclesResponse(customer));
     }
 
 }
