@@ -2,6 +2,7 @@ package com.matteusmoreno.moto_manager.controller;
 
 import com.matteusmoreno.moto_manager.entity.Product;
 import com.matteusmoreno.moto_manager.request.CreateProductRequest;
+import com.matteusmoreno.moto_manager.request.ProductQuantityUpdateRequest;
 import com.matteusmoreno.moto_manager.request.UpdateProductRequest;
 import com.matteusmoreno.moto_manager.response.ProductDetailsResponse;
 import com.matteusmoreno.moto_manager.service.ProductService;
@@ -59,6 +60,20 @@ public class ProductController {
     @PatchMapping("/enable/{id}")
     public ResponseEntity<ProductDetailsResponse> enable(@PathVariable Long id) {
         Product product = productService.enableProduct(id);
+
+        return ResponseEntity.ok(new ProductDetailsResponse(product));
+    }
+
+    @PatchMapping("/add-product")
+    public ResponseEntity<ProductDetailsResponse> addProduct(@RequestBody @Valid ProductQuantityUpdateRequest request) {
+        Product product = productService.addProduct(request);
+
+        return ResponseEntity.ok(new ProductDetailsResponse(product));
+    }
+
+    @PatchMapping("/remove-product")
+    public ResponseEntity<ProductDetailsResponse> removeProduct(@RequestBody @Valid ProductQuantityUpdateRequest request) {
+        Product product = productService.removeProduct(request);
 
         return ResponseEntity.ok(new ProductDetailsResponse(product));
     }

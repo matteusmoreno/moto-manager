@@ -44,4 +44,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleInvalidZipcodeException(InvalidZipcodeException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ProductAlreadyExistsException.class)
+    public ResponseEntity<String> handleProductAlreadyExistsException(ProductAlreadyExistsException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InsufficientProductQuantityException.class)
+    public ResponseEntity<String> handleInsufficientProductQuantityException(InsufficientProductQuantityException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

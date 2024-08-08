@@ -1,9 +1,12 @@
 package com.matteusmoreno.moto_manager.service;
 
 import com.matteusmoreno.moto_manager.entity.Product;
+import com.matteusmoreno.moto_manager.exception.InsufficientProductQuantityException;
+import com.matteusmoreno.moto_manager.exception.ProductAlreadyExistsException;
 import com.matteusmoreno.moto_manager.mapper.ProductMapper;
 import com.matteusmoreno.moto_manager.repository.ProductRepository;
 import com.matteusmoreno.moto_manager.request.CreateProductRequest;
+import com.matteusmoreno.moto_manager.request.ProductQuantityUpdateRequest;
 import com.matteusmoreno.moto_manager.request.UpdateProductRequest;
 import com.matteusmoreno.moto_manager.response.ProductDetailsResponse;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,12 +34,7 @@ public class ProductService {
     public Product createProduct(CreateProductRequest request) {
 
         if (productRepository.existsByNameAndManufacturerIgnoreCase(request.name(), request.manufacturer())) {
-            Product product = productRepository.findByNameAndManufacturerIgnoreCase(request.name(), request.manufacturer());
-            product.setQuantity(product.getQuantity() + request.quantity());
-            product.setPrice(request.price());
-            product.setDescription(request.description());
-            product.setUpdatedAt(LocalDateTime.now());
-            return product;
+            throw new ProductAlreadyExistsException();
         }
 
         Product product = productMapper.mapToProductForCreation(request);
@@ -82,6 +80,32 @@ public class ProductService {
 
         product.setActive(true);
         product.setDeletedAt(null);
+        product.setUpdatedAt(LocalDateTime.now());
+        productRepository.save(product);
+
+        return product;
+    }
+
+    @Transactional
+    public Product addProduct(ProductQuantityUpdateRequest request) {
+        Product product = productRepository.findById(request.id())
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        product.setQuantity(product.getQuantity() + request.quantity());
+        product.setUpdatedAt(LocalDateTime.now());
+        productRepository.save(product);
+
+        return product;
+    }
+
+    @Transactional
+    public Product removeProduct(ProductQuantityUpdateRequest request) {
+        Product product = productRepository.findById(request.id())
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        if (request.quantity() > product.getQuantity()) throw new InsufficientProductQuantityException();
+
+        product.setQuantity(product.getQuantity() - request.quantity());
         product.setUpdatedAt(LocalDateTime.now());
         productRepository.save(product);
 
