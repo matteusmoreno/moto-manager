@@ -23,7 +23,7 @@ public class ProductService {
     @Transactional
     public Product createProduct(CreateProductRequest request) {
 
-        if (productRepository.existsByNameAndManufacturerIgnoreCase(request.manufacturer(), request.name())) {
+        if (productRepository.existsByNameAndManufacturerIgnoreCase(request.name(), request.manufacturer())) {
             Product product = productRepository.findByNameAndManufacturerIgnoreCase(request.name(), request.manufacturer());
             product.setQuantity(product.getQuantity() + request.quantity());
             return product;
