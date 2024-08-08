@@ -64,4 +64,27 @@ public class ProductService {
 
         return product;
     }
+
+    @Transactional
+    public void disableProduct(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        product.setActive(false);
+        product.setDeletedAt(LocalDateTime.now());
+        productRepository.save(product);
+    }
+
+    @Transactional
+    public Product enableProduct(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        product.setActive(true);
+        product.setDeletedAt(null);
+        product.setUpdatedAt(LocalDateTime.now());
+        productRepository.save(product);
+
+        return product;
+    }
 }

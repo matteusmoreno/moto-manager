@@ -48,4 +48,18 @@ public class ProductController {
 
         return ResponseEntity.ok(new ProductDetailsResponse(product));
     }
+
+    @DeleteMapping("/disable/{id}")
+    public ResponseEntity<Void> disable(@PathVariable Long id) {
+        productService.disableProduct(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/enable/{id}")
+    public ResponseEntity<ProductDetailsResponse> enable(@PathVariable Long id) {
+        Product product = productService.enableProduct(id);
+
+        return ResponseEntity.ok(new ProductDetailsResponse(product));
+    }
 }
