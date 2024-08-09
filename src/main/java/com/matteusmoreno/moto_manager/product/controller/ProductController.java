@@ -64,15 +64,15 @@ public class ProductController {
         return ResponseEntity.ok(new ProductDetailsResponse(product));
     }
 
-    @PatchMapping("/add-product")
-    public ResponseEntity<ProductDetailsResponse> addProduct(@RequestBody @Valid ProductQuantityUpdateRequest request) {
-        Product product = productService.addProductQuantity(request);
+    @PatchMapping("/increment-product-quantity")
+    public ResponseEntity<ProductDetailsResponse> incrementProductQuantity(@RequestBody @Valid ProductQuantityUpdateRequest request) {
+        Product product = productService.incrementProductQuantity(request);
 
         return ResponseEntity.ok(new ProductDetailsResponse(product));
     }
 
-    @PatchMapping("/remove-product")
-    public ResponseEntity<ProductDetailsResponse> removeProduct(@RequestBody @Valid ProductQuantityUpdateRequest request) {
+    @PatchMapping("/reduce-product-quantity")
+    public ResponseEntity<ProductDetailsResponse> reduceProductQuantity(@RequestBody @Valid ProductQuantityUpdateRequest request) {
         Product product = productService.reduceProductQuantity(request);
 
         return ResponseEntity.ok(new ProductDetailsResponse(product));

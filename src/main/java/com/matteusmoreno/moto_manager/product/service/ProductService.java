@@ -87,7 +87,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product addProductQuantity(ProductQuantityUpdateRequest request) {
+    public Product incrementProductQuantity(ProductQuantityUpdateRequest request) {
         Product product = productRepository.findById(request.id())
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 

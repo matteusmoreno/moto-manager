@@ -8,6 +8,7 @@ import com.matteusmoreno.moto_manager.product.repository.ProductRepository;
 import com.matteusmoreno.moto_manager.product.request.CreateProductRequest;
 import com.matteusmoreno.moto_manager.product.request.ProductQuantityUpdateRequest;
 import com.matteusmoreno.moto_manager.product.request.UpdateProductRequest;
+import com.matteusmoreno.moto_manager.product.response.ProductDetailsResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,9 +17,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -89,7 +94,30 @@ class ProductServiceTest {
         assertThrows(ProductAlreadyExistsException.class, () -> productService.createProduct(createRequest));
     }
 
-    // IMPLEMENTAR O TESTE PARA LISTAGEM DE PRODUCTS
+    @Test
+    @DisplayName("Should return a paginated list of products")
+    void shouldReturnAPaginatedListOfProducts() {
+
+        Page<Product> productPage = new PageImpl<>(Collections.singletonList(product));
+        Pageable pageable = Pageable.ofSize(10);
+
+        when(productRepository.findAll(pageable)).thenReturn(productPage);
+
+        Page<ProductDetailsResponse> responsePage = productService.findAllProducts(pageable);
+        ProductDetailsResponse response = responsePage.getContent().get(0);
+
+        assertEquals(1, responsePage.getTotalElements());
+        assertEquals(product.getId(), response.id());
+        assertEquals(product.getName(), response.name());
+        assertEquals(product.getDescription(), response.description());
+        assertEquals(product.getManufacturer(), response.manufacturer());
+        assertEquals(product.getPrice(), response.price());
+        assertEquals(product.getQuantity(), response.quantity());
+        assertEquals(product.getCreatedAt(), response.createdAt());
+        assertEquals(product.getUpdatedAt(), response.updatedAt());
+        assertEquals(product.getDeletedAt(), response.deletedAt());
+        assertEquals(product.getActive(), response.active());
+    }
 
     @Test
     @DisplayName("Should update a product successfully")
@@ -165,7 +193,7 @@ class ProductServiceTest {
 
         when(productRepository.findById(productQuantityUpdateRequest.id())).thenReturn(Optional.ofNullable(product));
 
-        Product result = productService.addProductQuantity(productQuantityUpdateRequest);
+        Product result = productService.incrementProductQuantity(productQuantityUpdateRequest);
 
         verify(productRepository, times(1)).findById(productQuantityUpdateRequest.id());
         verify(productRepository, times(1)).save(result);
