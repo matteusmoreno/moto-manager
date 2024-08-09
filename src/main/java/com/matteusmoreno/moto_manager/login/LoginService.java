@@ -51,7 +51,7 @@ public class LoginService {
                 .expiresAt(Instant.now().plusSeconds(600L))
                 .claim("userId", employee.getId())
                 .claim("name", employee.getName())
-                .claim("scope", employee.getEmployeeRole())
+                .claim("scope", employee.getRole())
                 .build();
     }
 

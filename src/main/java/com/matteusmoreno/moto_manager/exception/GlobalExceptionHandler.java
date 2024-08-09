@@ -54,4 +54,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleInsufficientProductQuantityException(InsufficientProductQuantityException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(MotorcycleNotAssignedException.class)
+    public ResponseEntity<String> handleMotorcycleNotAssignedException(MotorcycleNotAssignedException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
 }

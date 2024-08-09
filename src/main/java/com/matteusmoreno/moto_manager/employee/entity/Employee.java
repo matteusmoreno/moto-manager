@@ -28,7 +28,7 @@ public class Employee {
     private Integer age;
     private String cpf;
     @Enumerated(EnumType.STRING)
-    private EmployeeRole employeeRole;
+    private EmployeeRole role;
     @ManyToOne
     private Address address;
     private LocalDateTime createdAt;

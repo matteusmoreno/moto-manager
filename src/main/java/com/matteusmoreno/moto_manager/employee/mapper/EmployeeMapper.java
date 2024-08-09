@@ -31,7 +31,7 @@ public class EmployeeMapper {
                 .birthDate(request.birthDate())
                 .age(Period.between(request.birthDate(), LocalDate.now()).getYears())
                 .cpf(request.cpf())
-                .employeeRole(request.employeeRole())
+                .role(request.role())
                 .address(address)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(null)

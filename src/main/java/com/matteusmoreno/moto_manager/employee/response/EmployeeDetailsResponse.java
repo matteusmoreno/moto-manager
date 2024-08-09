@@ -35,7 +35,7 @@ public record EmployeeDetailsResponse(
                 employee.getBirthDate(),
                 employee.getAge(),
                 employee.getCpf(),
-                employee.getEmployeeRole().name(),
+                employee.getRole().name(),
                 new AddressDetailsResponse(employee.getAddress()),
                 employee.getCreatedAt(),
                 employee.getUpdatedAt(),

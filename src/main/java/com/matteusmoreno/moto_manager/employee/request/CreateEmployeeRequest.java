@@ -21,7 +21,7 @@ public record CreateEmployeeRequest(
         @Pattern(regexp = "^\\(\\d{2}\\)\\d{9}$", message = "Invalid phone format (xx)xxxxxxxxx")
         String phone,
         LocalDate birthDate,
-        EmployeeRole employeeRole,
+        EmployeeRole role,
         @Pattern(regexp = "^\\d{5}-\\d{3}$", message = "Invalid zipcode format (xxxxx-xxx)")
         String zipcode,
         String number,
