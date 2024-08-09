@@ -1,9 +1,7 @@
 package com.matteusmoreno.moto_manager.login;
 
-import com.matteusmoreno.moto_manager.entity.Customer;
-import com.matteusmoreno.moto_manager.entity.Employee;
-import com.matteusmoreno.moto_manager.repository.CustomerRepository;
-import com.matteusmoreno.moto_manager.repository.EmployeeRepository;
+import com.matteusmoreno.moto_manager.employee.entity.Employee;
+import com.matteusmoreno.moto_manager.employee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -53,7 +51,7 @@ public class LoginService {
                 .expiresAt(Instant.now().plusSeconds(600L))
                 .claim("userId", employee.getId())
                 .claim("name", employee.getName())
-                .claim("scope", employee.getRole())
+                .claim("scope", employee.getEmployeeRole())
                 .build();
     }
 
