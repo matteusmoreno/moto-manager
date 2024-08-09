@@ -87,7 +87,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product addProduct(ProductQuantityUpdateRequest request) {
+    public Product addProductQuantity(ProductQuantityUpdateRequest request) {
         Product product = productRepository.findById(request.id())
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
@@ -99,7 +99,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product removeProduct(ProductQuantityUpdateRequest request) {
+    public Product reduceProductQuantity(ProductQuantityUpdateRequest request) {
         Product product = productRepository.findById(request.id())
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
