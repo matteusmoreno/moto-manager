@@ -59,4 +59,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleMotorcycleNotAssignedException(MotorcycleNotAssignedException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(AddressNotOwnedByCustomerException.class)
+    public ResponseEntity<String> handleAddressNotOwnedByCustomerException(AddressNotOwnedByCustomerException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

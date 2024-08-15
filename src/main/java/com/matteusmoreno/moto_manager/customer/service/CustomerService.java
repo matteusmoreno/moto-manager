@@ -1,7 +1,9 @@
 package com.matteusmoreno.moto_manager.customer.service;
 
+import com.matteusmoreno.moto_manager.address.repository.AddressRepository;
 import com.matteusmoreno.moto_manager.address.service.AddressService;
 import com.matteusmoreno.moto_manager.customer.request.MotorcycleCustomerRequest;
+import com.matteusmoreno.moto_manager.customer.request.RemoveCustomerAddressRequest;
 import com.matteusmoreno.moto_manager.customer.request.UpdateCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.entity.Customer;
 import com.matteusmoreno.moto_manager.customer.mapper.CustomerMapper;
@@ -9,6 +11,7 @@ import com.matteusmoreno.moto_manager.customer.repository.CustomerRepository;
 import com.matteusmoreno.moto_manager.customer.request.CreateCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.response.CustomerDetailsResponse;
 import com.matteusmoreno.moto_manager.address.entity.Address;
+import com.matteusmoreno.moto_manager.exception.AddressNotOwnedByCustomerException;
 import com.matteusmoreno.moto_manager.motorcycle.entity.Motorcycle;
 import com.matteusmoreno.moto_manager.exception.AddressAlreadyAssignedToCustomerException;
 import com.matteusmoreno.moto_manager.exception.MotorcycleAlreadyAssignedException;
@@ -34,13 +37,15 @@ public class CustomerService {
     private final CustomerMapper customerMapper;
     private final AddressService addressService;
     private final MotorcycleRepository motorcycleRepository;
+    private final AddressRepository addressRepository;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper, AddressService addressService, MotorcycleRepository motorcycleRepository) {
+    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper, AddressService addressService, MotorcycleRepository motorcycleRepository, AddressRepository addressRepository) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
         this.addressService = addressService;
         this.motorcycleRepository = motorcycleRepository;
+        this.addressRepository = addressRepository;
     }
 
     @Transactional
@@ -153,5 +158,20 @@ public class CustomerService {
         return customer;
     }
 
-    // LEMBRAR DE ADICIONAR O METODO DE REMOVER ENDEREÇO
+    @Transactional
+    public Customer removeAddress(RemoveCustomerAddressRequest request) {
+
+        if (!addressRepository.existsByZipcodeAndNumber(request.zipcode(), request.number())) throw new EntityNotFoundException("Address not found");
+
+        Customer customer = customerRepository.findById(request.customerId())
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+
+        Address address = addressRepository.findByZipcodeAndNumber(request.zipcode(), request.number());
+
+        if (!customer.getAddresses().contains(address)) throw new AddressNotOwnedByCustomerException();
+
+        customer.getAddresses().removeIf(a -> a.getZipcode().equals(request.zipcode()));
+
+        return customer;
+    }
 }

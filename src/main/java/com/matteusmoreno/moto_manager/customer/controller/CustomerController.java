@@ -4,6 +4,7 @@ import com.matteusmoreno.moto_manager.address.request.AddressCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.entity.Customer;
 import com.matteusmoreno.moto_manager.customer.request.CreateCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.request.MotorcycleCustomerRequest;
+import com.matteusmoreno.moto_manager.customer.request.RemoveCustomerAddressRequest;
 import com.matteusmoreno.moto_manager.customer.request.UpdateCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.response.CustomerDetailsResponse;
 import com.matteusmoreno.moto_manager.customer.response.CustomerMotorcyclesResponse;
@@ -88,6 +89,13 @@ public class CustomerController {
         URI uri = uriBuilder.path("/customers/add-address/{id}").buildAndExpand(customer.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new CustomerDetailsResponse(customer));
+    }
+
+    @DeleteMapping("/remove-address")
+    public ResponseEntity<CustomerDetailsResponse> removeAddress(@RequestBody @Valid RemoveCustomerAddressRequest request) {
+        Customer customer = customerService.removeAddress(request);
+
+        return ResponseEntity.ok(new CustomerDetailsResponse(customer));
     }
 
 }

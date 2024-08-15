@@ -1,6 +1,7 @@
 package com.matteusmoreno.moto_manager.customer.service;
 
 import com.matteusmoreno.moto_manager.address.entity.Address;
+import com.matteusmoreno.moto_manager.address.repository.AddressRepository;
 import com.matteusmoreno.moto_manager.address.request.AddressCustomerRequest;
 import com.matteusmoreno.moto_manager.address.service.AddressService;
 import com.matteusmoreno.moto_manager.customer.entity.Customer;
@@ -8,9 +9,11 @@ import com.matteusmoreno.moto_manager.customer.mapper.CustomerMapper;
 import com.matteusmoreno.moto_manager.customer.repository.CustomerRepository;
 import com.matteusmoreno.moto_manager.customer.request.CreateCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.request.MotorcycleCustomerRequest;
+import com.matteusmoreno.moto_manager.customer.request.RemoveCustomerAddressRequest;
 import com.matteusmoreno.moto_manager.customer.request.UpdateCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.response.CustomerDetailsResponse;
 import com.matteusmoreno.moto_manager.exception.AddressAlreadyAssignedToCustomerException;
+import com.matteusmoreno.moto_manager.exception.AddressNotOwnedByCustomerException;
 import com.matteusmoreno.moto_manager.exception.MotorcycleAlreadyAssignedException;
 import com.matteusmoreno.moto_manager.exception.MotorcycleNotOwnedByCustomerException;
 import com.matteusmoreno.moto_manager.motorcycle.constant.MotorcycleBrand;
@@ -19,6 +22,7 @@ import com.matteusmoreno.moto_manager.motorcycle.entity.Motorcycle;
 import com.matteusmoreno.moto_manager.motorcycle.repository.MotorcycleRepository;
 import com.matteusmoreno.moto_manager.product.entity.Product;
 import com.matteusmoreno.moto_manager.product.response.ProductDetailsResponse;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,6 +57,9 @@ class CustomerServiceTest {
 
     @Mock
     private MotorcycleRepository motorcycleRepository;
+
+    @Mock
+    private AddressRepository addressRepository;
 
     @InjectMocks
     private CustomerService customerService;
@@ -324,6 +331,48 @@ class CustomerServiceTest {
         verify(customerRepository, times(0)).save(customer);
 
         assertTrue(customer.getAddresses().contains(address));
+    }
+
+    @Test
+    @DisplayName("Should successfully remove a address to a customer")
+    void shouldRemoveAddressToCustomerSuccessfully() {
+        RemoveCustomerAddressRequest request = new RemoveCustomerAddressRequest(customerId, address.getZipcode(), address.getNumber());
+
+        when(customerRepository.findById(request.customerId())).thenReturn(Optional.ofNullable(customer));
+        when(addressRepository.findByZipcodeAndNumber(request.zipcode(), request.number())).thenReturn(address);
+        when(addressRepository.existsByZipcodeAndNumber(request.zipcode(), request.number())).thenReturn(true);
+
+        Customer result = customerService.removeAddress(request);
+
+        assertEquals(0, result.getAddresses().size());
+        assertFalse(result.getAddresses().contains(address));
+    }
+
+    @Test
+    @DisplayName("Should return EntityNotFoundException when the address not exists")
+    void shouldReturnEntityNotFoundExceptionWhenTheAddressNotExists() {
+        RemoveCustomerAddressRequest request = new RemoveCustomerAddressRequest(customerId, "00000-000", "10");
+
+        when(addressRepository.existsByZipcodeAndNumber(request.zipcode(), request.number())).thenReturn(false);
+
+        assertThrows(EntityNotFoundException.class, () -> customerService.removeAddress(request));
+    }
+
+    @Test
+    @DisplayName("Should return AddressNotOwnedByCustomerException when customer is not linked to address")
+    void shouldReturnAddressNotOwnedByCustomerExceptionWhenCustomerIsNotLinkedToAddress() {
+        Address anotherAddress = new Address(2L, "28994-675", "Saquarema", "Bacaxá(Bacaxá)", "RJ",
+                "Rua Alfredo Menezes", "223", "Armação Motos", LocalDateTime.now());
+
+        RemoveCustomerAddressRequest request = new RemoveCustomerAddressRequest(customerId, anotherAddress.getZipcode(), anotherAddress.getNumber());
+
+        when(addressRepository.existsByZipcodeAndNumber(request.zipcode(), request.number())).thenReturn(true);
+        when(customerRepository.findById(request.customerId())).thenReturn(Optional.ofNullable(customer));
+        when(addressRepository.findByZipcodeAndNumber(request.zipcode(), request.number())).thenReturn(anotherAddress);
+
+        assertThrows(AddressNotOwnedByCustomerException.class, () -> customerService.removeAddress(request));
+
+        assertFalse(customer.getAddresses().contains(anotherAddress));
 
     }
 }
