@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  mysql_db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: moto_manager
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    networks:
+      - moto_manager_network
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  moto_manager_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: moto_manager_app
+    depends_on:
+      - mysql_db
+    ports:
+      - "8080:8080"
+    networks:
+      - moto_manager_network
+
+volumes:
+  mysql_data:
+
+networks:
+  moto_manager_network:
+    driver: bridge

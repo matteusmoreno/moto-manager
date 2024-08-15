@@ -33,6 +33,6 @@ public record CustomerDetailsResponse(
                 customer.getCreatedAt(),
                 customer.getUpdatedAt(),
                 customer.getDeletedAt(),
-                customer.isActive());
+                customer.getActive());
     }
 }

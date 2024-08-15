@@ -152,4 +152,6 @@ public class CustomerService {
 
         return customer;
     }
+
+    // LEMBRAR DE ADICIONAR O METODO DE REMOVER ENDEREÇO
 }

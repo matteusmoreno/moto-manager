@@ -37,6 +37,6 @@ public class Customer {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
-    private boolean active;
+    private Boolean active;
 
 }
