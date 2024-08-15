@@ -37,7 +37,7 @@ public class AddressService {
 
         if (viaCepResponse.localidade() == null) throw new InvalidZipcodeException();
 
-        Address address = addressMapper.setAddressAttributes(viaCepResponse, number, complement);
+        Address address = addressMapper.mapToAddressForCreation(viaCepResponse, number, complement);
         addressRepository.save(address);
 
         return address;

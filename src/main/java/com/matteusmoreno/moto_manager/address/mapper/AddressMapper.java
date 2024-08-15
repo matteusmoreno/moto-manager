@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Component
 public class AddressMapper {
 
-    public Address setAddressAttributes(ViaCepResponse viaCepResponse, String number, String complement) {
+    public Address mapToAddressForCreation(ViaCepResponse viaCepResponse, String number, String complement) {
         return Address.builder()
                 .zipcode(viaCepResponse.cep())
                 .city(viaCepResponse.localidade())
