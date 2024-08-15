@@ -4,9 +4,8 @@ services:
   mysql_db:
     image: mysql:8.0
     container_name: mysql_db
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: moto_manager
+    env_file:
+      - env/mysql.env
     ports:
       - "3306:3306"
     restart: unless-stopped
@@ -14,6 +13,12 @@ services:
       - moto_manager_network
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
 
   moto_manager_app:
     build:
@@ -21,11 +26,14 @@ services:
       dockerfile: Dockerfile
     container_name: moto_manager_app
     depends_on:
-      - mysql_db
+      mysql_db:
+        condition: service_healthy
     ports:
       - "8080:8080"
     networks:
       - moto_manager_network
+    env_file:
+      - env/application-properties.env
 
 volumes:
   mysql_data:
