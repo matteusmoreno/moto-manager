@@ -48,7 +48,7 @@ public class LoginService {
                 .issuer("MotoManager")
                 .subject(employee.getUsername())
                 .issuedAt(Instant.now())
-                .expiresAt(Instant.now().plusSeconds(600L))
+                .expiresAt(Instant.now().plusSeconds(18000L))
                 .claim("userId", employee.getId())
                 .claim("name", employee.getName())
                 .claim("scope", employee.getRole())

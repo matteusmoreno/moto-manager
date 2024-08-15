@@ -21,7 +21,7 @@ public class EmployeeMapper {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Employee setEmployeeAttributes(CreateEmployeeRequest request, Address address) {
+    public Employee mapToEmployeeForCreation(CreateEmployeeRequest request, Address address) {
         return Employee.builder()
                 .username(request.username())
                 .password(passwordEncoder.encode(request.password()))

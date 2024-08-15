@@ -37,7 +37,7 @@ public class EmployeeService {
     @Transactional
     public Employee createEmployee(CreateEmployeeRequest request) {
         Address address = addressService.createAddress(request.zipcode(), request.number(), request.complement());
-        Employee employee = employeeMapper.setEmployeeAttributes(request, address);
+        Employee employee = employeeMapper.mapToEmployeeForCreation(request, address);
 
         employeeRepository.save(employee);
 
