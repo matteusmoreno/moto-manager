@@ -38,7 +38,7 @@ class CustomerMapperTest {
         assertEquals(request.name(), result.getName());
         assertEquals(request.email(), result.getEmail());
         assertEquals(request.birthDate(), result.getBirthDate());
-        assertEquals(Period.between(LocalDate.now(), request.birthDate()).getYears(), result.getAge());
+        assertEquals(Period.between(request.birthDate(), LocalDate.now()).getYears(), result.getAge());
         assertEquals(request.phone(), result.getPhone());
         assertEquals(address, result.getAddresses().get(0));
         assertNotNull(result.getCreatedAt());
