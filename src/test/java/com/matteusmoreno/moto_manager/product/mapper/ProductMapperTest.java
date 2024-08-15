@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@DisplayName("Product Mapper Tests")
 class ProductMapperTest {
 
     @Autowired
