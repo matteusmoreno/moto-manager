@@ -15,7 +15,7 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<List<InvalidFields>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         List<FieldError> errors = ex.getFieldErrors();
         List<InvalidFields> invalidFields = errors.stream().map(InvalidFields::new).toList();
 
