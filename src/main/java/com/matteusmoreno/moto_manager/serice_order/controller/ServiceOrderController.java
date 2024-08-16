@@ -37,4 +37,11 @@ public class ServiceOrderController {
 
         return ResponseEntity.ok(new ServiceOrderResponse(serviceOrder));
     }
+
+    @PatchMapping("/complete/{id}")
+    public ResponseEntity<ServiceOrderResponse> complete(@PathVariable Long id) {
+        ServiceOrder serviceOrder = serviceOrderService.completeServiceOrder(id);
+
+        return ResponseEntity.ok(new ServiceOrderResponse(serviceOrder));
+    }
 }

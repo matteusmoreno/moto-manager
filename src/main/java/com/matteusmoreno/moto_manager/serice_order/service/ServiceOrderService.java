@@ -43,4 +43,17 @@ public class ServiceOrderService {
 
         return serviceOrder;
     }
+
+    @Transactional
+    public ServiceOrder completeServiceOrder(Long id) {
+        ServiceOrder serviceOrder = serviceOrderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Service order not found"));
+
+        serviceOrder.setServiceOrderStatus(ServiceOrderStatus.COMPLETED);
+        serviceOrder.setCompletedAt(LocalDateTime.now());
+
+        serviceOrderRepository.save(serviceOrder);
+
+        return serviceOrder;
+    }
 }
