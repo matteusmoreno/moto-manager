@@ -54,20 +54,27 @@ moto-manager/
 
 ## Configuração do Ambiente
 
-### Variáveis de Ambiente
+### Preparar a Pasta `env` e os Arquivos `.env`
 
-Configure as variáveis de ambiente no arquivo `env/application-properties.env` para a aplicação Spring Boot e `env/mysql.env` para o banco de dados MySQL.
+Para configurar o ambiente da aplicação, você precisa criar a pasta `env` e os arquivos de configuração necessários. Siga estas etapas:
 
-#### Exemplo de `application-properties.env`
+1. **Crie a pasta `env`** na raiz do projeto.
+2. **Crie os arquivos de configuração** dentro da pasta `env` com os seguintes nomes e conteúdos:
 
-SPRING_DATASOURCE_URL=jdbc:mysql://mysql_db:3306/moto_manager  
-SPRING_DATASOURCE_USERNAME=root  
-SPRING_DATASOURCE_PASSWORD=root
+   - **`application-properties.env`**: Este arquivo deve conter as variáveis de ambiente para a aplicação Spring Boot.
 
-#### Exemplo de `mysql.env`
+     ```env
+     SPRING_DATASOURCE_URL=jdbc:mysql://mysql_db:3306/moto_manager  
+     SPRING_DATASOURCE_USERNAME=root  
+     SPRING_DATASOURCE_PASSWORD=root
+     ```
 
-MYSQL_ROOT_PASSWORD=root  
-MYSQL_DATABASE=moto_manager
+   - **`mysql.env`**: Este arquivo deve conter as variáveis de ambiente para o banco de dados MySQL.
+
+     ```env
+     MYSQL_ROOT_PASSWORD=root  
+     MYSQL_DATABASE=moto_manager
+     ```
 
 #### Gerar Chaves
 
