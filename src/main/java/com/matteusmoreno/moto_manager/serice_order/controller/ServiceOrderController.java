@@ -44,4 +44,11 @@ public class ServiceOrderController {
 
         return ResponseEntity.ok(new ServiceOrderResponse(serviceOrder));
     }
+
+    @PatchMapping("/cancel/{id}")
+    public ResponseEntity<ServiceOrderResponse> cancel(@PathVariable Long id) {
+        ServiceOrder serviceOrder = serviceOrderService.cancelServiceOrder(id);
+
+        return ResponseEntity.ok(new ServiceOrderResponse(serviceOrder));
+    }
 }

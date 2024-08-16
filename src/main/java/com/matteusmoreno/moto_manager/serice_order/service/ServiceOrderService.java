@@ -56,4 +56,17 @@ public class ServiceOrderService {
 
         return serviceOrder;
     }
+
+    @Transactional
+    public ServiceOrder cancelServiceOrder(Long id) {
+        ServiceOrder serviceOrder = serviceOrderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Service order not found"));
+
+        serviceOrder.setServiceOrderStatus(ServiceOrderStatus.CANCELED);
+        serviceOrder.setCanceledAt(LocalDateTime.now());
+
+        serviceOrderRepository.save(serviceOrder);
+
+        return serviceOrder;
+    }
 }
