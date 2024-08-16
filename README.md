@@ -124,6 +124,20 @@ Para executar o projeto usando Docker, siga estes passos:
 ```bash
    docker-compose down
 ```
+
+### Swagger
+
+A aplicação utiliza Swagger para a documentação da API, facilitando a visualização e a interação com os endpoints expostos pela aplicação. Swagger fornece uma interface gráfica para explorar a API, testar endpoints e visualizar a estrutura da API.
+
+#### Acessar a Documentação do Swagger
+
+Depois de iniciar a aplicação, você pode acessar a interface do Swagger em:
+
+```bash
+http://localhost:8080/swagger-ui/index.html
+```
+Nessa interface, você encontrará uma lista de todos os endpoints disponíveis, suas descrições e a possibilidade de testar cada um diretamente pelo navegador.
+
 ## Dependências
 
 - **Spring Boot Starter Data JPA**: Para integração com o banco de dados e JPA.
