@@ -146,8 +146,6 @@ class ProductServiceTest {
     @DisplayName("Should throw EntityNotFoundException if the product ID does not exist in the database")
     void shouldThrowEntityNotFoundExceptionIfProductIdDoesNotExist() {
 
-        when(productRepository.findById(any())).thenReturn(Optional.empty());
-
         assertThrows(EntityNotFoundException.class, () -> productService.updateProduct(updateRequest));
 
         verify(productRepository, times(1)).findById(any());

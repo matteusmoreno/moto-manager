@@ -31,10 +31,11 @@ public class MotorcycleService {
 
     @Transactional
     public Motorcycle createMotorcycle(CreateMotorcycleRequest request) {
-        Motorcycle motorcycle = motorcycleMapper.mapToMotorcycleForCreation(request);
-        if (motorcycleRepository.existsByPlate(motorcycle.getPlate())) throw new MotorcycleAlreadyExistsException();
-        motorcycleRepository.save(motorcycle);
+        if (motorcycleRepository.existsByPlate(request.plate())) throw new MotorcycleAlreadyExistsException();
 
+        Motorcycle motorcycle = motorcycleMapper.mapToMotorcycleForCreation(request);
+
+        motorcycleRepository.save(motorcycle);
         return motorcycle;
     }
 
