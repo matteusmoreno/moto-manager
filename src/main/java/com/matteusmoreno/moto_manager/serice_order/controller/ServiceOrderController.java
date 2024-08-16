@@ -7,10 +7,7 @@ import com.matteusmoreno.moto_manager.serice_order.service.ServiceOrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -32,5 +29,12 @@ public class ServiceOrderController {
         URI uri = uriBuilder.path("/service-orders/{id}").buildAndExpand(serviceOrder.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new ServiceOrderResponse(serviceOrder));
+    }
+
+    @PatchMapping("/start/{id}")
+    public ResponseEntity<ServiceOrderResponse> start(@PathVariable Long id) {
+        ServiceOrder serviceOrder = serviceOrderService.startServiceOrder(id);
+
+        return ResponseEntity.ok(new ServiceOrderResponse(serviceOrder));
     }
 }
