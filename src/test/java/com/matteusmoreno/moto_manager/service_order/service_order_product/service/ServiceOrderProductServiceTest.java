@@ -20,6 +20,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -33,7 +34,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @DisplayName("Service Order Product Service Tests")
 @ExtendWith(MockitoExtension.class)
@@ -51,9 +52,6 @@ class ServiceOrderProductServiceTest {
     @InjectMocks
     private ServiceOrderProductService serviceOrderProductService;
 
-    private Address address;
-    private Employee seller;
-    private Employee mechanic;
     private Customer customer;
     private Motorcycle motorcycle;
     private Product oleoMotor;
@@ -63,10 +61,10 @@ class ServiceOrderProductServiceTest {
 
     @BeforeEach
     void setup() {
-        address = new Address(1L, "28994-675", "Street", "Neighborhood", "City", "State", "21", "Casa", LocalDateTime.now());
-        seller = new Employee(UUID.randomUUID(), "seller", "password", "Seller", "seller@email.com", "(99)999999999", LocalDate.of(2000, 2, 10),
+        Address address = new Address(1L, "28994-675", "Street", "Neighborhood", "City", "State", "21", "Casa", LocalDateTime.now());
+        Employee seller = new Employee(UUID.randomUUID(), "seller", "password", "Seller", "seller@email.com", "(99)999999999", LocalDate.of(2000, 2, 10),
                 Period.between(LocalDate.of(2000, 2, 10), LocalDate.now()).getYears(), "222.222.222-22", EmployeeRole.SELLER, address, LocalDateTime.now(), null, null, true);
-        mechanic = new Employee(UUID.randomUUID(), "mechanic", "password", "Mechanic", "mechanic@email.com", "(22)222222222", LocalDate.of(1990, 8, 28),
+        Employee mechanic = new Employee(UUID.randomUUID(), "mechanic", "password", "Mechanic", "mechanic@email.com", "(22)222222222", LocalDate.of(1990, 8, 28),
                 Period.between(LocalDate.of(1990, 8, 28), LocalDate.now()).getYears(), "888.888.888-88", EmployeeRole.MECHANIC, address, LocalDateTime.now(), null, null, true);
         customer = new Customer(UUID.randomUUID(), "Customer", "customer@email.com", LocalDate.of(1990, 8, 28), Period.between(LocalDate.of(1990, 8, 28), LocalDate.now()).getYears(),
                 "(11)111111111", new ArrayList<>(), new ArrayList<>(), LocalDateTime.now(), null, null, true);
@@ -89,12 +87,16 @@ class ServiceOrderProductServiceTest {
 
         ServiceOrderProduct result = serviceOrderProductService.addProduct(request, serviceOrder.getId());
 
+        verify(serviceOrderRepository, times(1)).findById(serviceOrder.getId());
+        verify(productRepository, times(1)).findById(request.productId());
+        verify(serviceOrderProductRepository, times(1)).save(result);
+
         assertAll(
-                () -> assertEquals(oleoMotor.getId(), result.getProduct().getId()),
+                () -> assertEquals(oleoMotor, result.getProduct()),
                 () -> assertEquals(request.quantity(), result.getQuantity()),
-                () -> assertEquals(serviceOrder.getId(), result.getServiceOrder().getId()),
-                () -> assertEquals(result.getUnitaryPrice(), oleoMotor.getPrice()),
-                () -> assertEquals(result.getFinalPrice(), oleoMotor.getPrice().multiply(BigDecimal.valueOf(request.quantity())))
+                () -> assertEquals(oleoMotor.getPrice(), result.getUnitaryPrice()),
+                () -> assertEquals(result.getUnitaryPrice().multiply(BigDecimal.valueOf(request.quantity())) , result.getFinalPrice()),
+                () -> assertEquals(serviceOrder.getId(), result.getServiceOrder().getId())
         );
     }
 
@@ -108,6 +110,11 @@ class ServiceOrderProductServiceTest {
         when(serviceOrderRepository.findById(serviceOrder.getId())).thenReturn(Optional.of(serviceOrder));
         when(productRepository.findById(oleoMotor.getId())).thenReturn(Optional.of(oleoMotor));
 
-        assertThrows(InsufficientProductQuantityException.class, () -> serviceOrderProductService.addProduct(newRequest, serviceOrder.getId()));
+        Executable executable = () -> serviceOrderProductService.addProduct(newRequest, serviceOrder.getId());
+        assertThrows(InsufficientProductQuantityException.class, executable);
+
+        verify(serviceOrderRepository, times(1)).findById(serviceOrder.getId());
+        verify(productRepository, times(1)).findById(request.productId());
+        verify(serviceOrderProductRepository, times(0)).save(any());
     }
 }
