@@ -1,4 +1,4 @@
-package com.matteusmoreno.moto_manager.serice_order.constant;
+package com.matteusmoreno.moto_manager.service_order.constant;
 
 import lombok.Getter;
 

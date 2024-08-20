@@ -103,7 +103,7 @@ public class ProductService {
         Product product = productRepository.findById(request.id())
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
-        if (request.quantity() > product.getQuantity()) throw new InsufficientProductQuantityException();
+        if (request.quantity() > product.getQuantity()) throw new InsufficientProductQuantityException(product.getName());
 
         product.setQuantity(product.getQuantity() - request.quantity());
         product.setUpdatedAt(LocalDateTime.now());

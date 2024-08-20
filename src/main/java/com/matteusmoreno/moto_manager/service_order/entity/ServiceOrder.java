@@ -1,9 +1,9 @@
-package com.matteusmoreno.moto_manager.serice_order.entity;
+package com.matteusmoreno.moto_manager.service_order.entity;
 
 import com.matteusmoreno.moto_manager.employee.entity.Employee;
 import com.matteusmoreno.moto_manager.motorcycle.entity.Motorcycle;
-import com.matteusmoreno.moto_manager.serice_order.constant.ServiceOrderStatus;
-import com.matteusmoreno.moto_manager.serice_order.service_order_product.entity.ServiceOrderProduct;
+import com.matteusmoreno.moto_manager.service_order.constant.ServiceOrderStatus;
+import com.matteusmoreno.moto_manager.service_order.service_order_product.entity.ServiceOrderProduct;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,8 +32,8 @@ public class ServiceOrder {
     @ManyToOne
     private Employee mechanic;
 
-    @OneToMany(mappedBy = "serviceOrder", cascade = CascadeType.ALL)
-    private List<ServiceOrderProduct> products = new ArrayList<>();
+    @OneToMany(mappedBy = "serviceOrder", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServiceOrderProduct> products = new ArrayList<>();  // Certifique-se de que a lista é mutável
 
     private String description;
     private BigDecimal laborPrice;

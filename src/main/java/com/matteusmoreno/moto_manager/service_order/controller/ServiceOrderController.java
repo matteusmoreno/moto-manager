@@ -1,9 +1,10 @@
-package com.matteusmoreno.moto_manager.serice_order.controller;
+package com.matteusmoreno.moto_manager.service_order.controller;
 
-import com.matteusmoreno.moto_manager.serice_order.entity.ServiceOrder;
-import com.matteusmoreno.moto_manager.serice_order.request.CreateServiceOrderRequest;
-import com.matteusmoreno.moto_manager.serice_order.response.ServiceOrderResponse;
-import com.matteusmoreno.moto_manager.serice_order.service.ServiceOrderService;
+import com.matteusmoreno.moto_manager.service_order.entity.ServiceOrder;
+import com.matteusmoreno.moto_manager.service_order.request.CreateServiceOrderRequest;
+import com.matteusmoreno.moto_manager.service_order.request.UpdateServiceOrderRequest;
+import com.matteusmoreno.moto_manager.service_order.response.ServiceOrderResponse;
+import com.matteusmoreno.moto_manager.service_order.service.ServiceOrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,13 @@ public class ServiceOrderController {
     @PatchMapping("/cancel/{id}")
     public ResponseEntity<ServiceOrderResponse> cancel(@PathVariable Long id) {
         ServiceOrder serviceOrder = serviceOrderService.cancelServiceOrder(id);
+
+        return ResponseEntity.ok(new ServiceOrderResponse(serviceOrder));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ServiceOrderResponse> update(@RequestBody @Valid UpdateServiceOrderRequest request) {
+        ServiceOrder serviceOrder = serviceOrderService.updateServiceOrder(request);
 
         return ResponseEntity.ok(new ServiceOrderResponse(serviceOrder));
     }

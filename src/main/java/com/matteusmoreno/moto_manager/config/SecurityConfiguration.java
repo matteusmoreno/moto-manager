@@ -68,6 +68,10 @@ public class SecurityConfiguration {
                         .requestMatchers("/products/remove-product").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
 
                         .requestMatchers("/service-orders/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
+                        .requestMatchers("/service-orders/start/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
+                        .requestMatchers("/service-orders/complete/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
+                        .requestMatchers("/service-orders/cancel/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
+                        .requestMatchers("/service-orders/update").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
 
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)

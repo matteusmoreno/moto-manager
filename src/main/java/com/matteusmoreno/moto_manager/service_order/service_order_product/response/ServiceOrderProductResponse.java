@@ -1,6 +1,6 @@
-package com.matteusmoreno.moto_manager.serice_order.service_order_product.response;
+package com.matteusmoreno.moto_manager.service_order.service_order_product.response;
 
-import com.matteusmoreno.moto_manager.serice_order.service_order_product.entity.ServiceOrderProduct;
+import com.matteusmoreno.moto_manager.service_order.service_order_product.entity.ServiceOrderProduct;
 
 import java.math.BigDecimal;
 

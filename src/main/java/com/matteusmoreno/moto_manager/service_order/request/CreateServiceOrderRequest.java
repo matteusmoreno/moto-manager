@@ -1,6 +1,6 @@
-package com.matteusmoreno.moto_manager.serice_order.request;
+package com.matteusmoreno.moto_manager.service_order.request;
 
-import com.matteusmoreno.moto_manager.serice_order.service_order_product.request.CreateServiceOrderProductRequest;
+import com.matteusmoreno.moto_manager.service_order.service_order_product.request.ServiceOrderProductRequest;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -14,7 +14,7 @@ public record CreateServiceOrderRequest(
         UUID sellerId,
         @NotNull(message = "Mechanic id is required")
         UUID mechanicId,
-        List<CreateServiceOrderProductRequest> products,
+        List<ServiceOrderProductRequest> products,
         String description,
         BigDecimal laborPrice) {
 }

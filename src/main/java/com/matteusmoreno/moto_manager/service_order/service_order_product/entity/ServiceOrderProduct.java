@@ -1,7 +1,7 @@
-package com.matteusmoreno.moto_manager.serice_order.service_order_product.entity;
+package com.matteusmoreno.moto_manager.service_order.service_order_product.entity;
 
 import com.matteusmoreno.moto_manager.product.entity.Product;
-import com.matteusmoreno.moto_manager.serice_order.entity.ServiceOrder;
+import com.matteusmoreno.moto_manager.service_order.entity.ServiceOrder;
 import jakarta.persistence.*;
 import lombok.*;
 

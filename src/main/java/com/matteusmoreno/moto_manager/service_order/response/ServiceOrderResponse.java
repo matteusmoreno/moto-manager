@@ -1,10 +1,10 @@
-package com.matteusmoreno.moto_manager.serice_order.response;
+package com.matteusmoreno.moto_manager.service_order.response;
 
 import com.matteusmoreno.moto_manager.motorcycle.constant.MotorcycleBrand;
 import com.matteusmoreno.moto_manager.motorcycle.constant.MotorcycleColor;
-import com.matteusmoreno.moto_manager.serice_order.constant.ServiceOrderStatus;
-import com.matteusmoreno.moto_manager.serice_order.entity.ServiceOrder;
-import com.matteusmoreno.moto_manager.serice_order.service_order_product.response.ServiceOrderProductResponse;
+import com.matteusmoreno.moto_manager.service_order.constant.ServiceOrderStatus;
+import com.matteusmoreno.moto_manager.service_order.entity.ServiceOrder;
+import com.matteusmoreno.moto_manager.service_order.service_order_product.response.ServiceOrderProductResponse;
 
 import java.math.BigDecimal;
 import java.util.List;
