@@ -1,5 +1,7 @@
-package com.matteusmoreno.moto_manager.client;
+package com.matteusmoreno.moto_manager.client.email_sender;
 
+import com.matteusmoreno.moto_manager.client.email_sender.employee_request.CreateEmailEmployeeRequest;
+import com.matteusmoreno.moto_manager.client.email_sender.employee_request.UpdateEmailEmployeeRequest;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "mail-sender", url = "http://localhost:8081")
 public interface MailSenderClient {
 
-    @PostMapping("/email/send-email")
-    void sendEmail(@RequestBody @Valid EmailSendRequest request);
+    @PostMapping("/email/employee-creation")
+    void employeeCreationEmail(@RequestBody @Valid CreateEmailEmployeeRequest request);
+
+    @PostMapping("/email/employee-update")
+    void employeeUpdateEmail(@RequestBody @Valid UpdateEmailEmployeeRequest request);
 }

@@ -2,6 +2,9 @@ package com.matteusmoreno.moto_manager.employee.service;
 
 import com.matteusmoreno.moto_manager.address.service.AddressService;
 import com.matteusmoreno.moto_manager.address.entity.Address;
+import com.matteusmoreno.moto_manager.client.email_sender.employee_request.CreateEmailEmployeeRequest;
+import com.matteusmoreno.moto_manager.client.email_sender.MailSenderClient;
+import com.matteusmoreno.moto_manager.client.email_sender.employee_request.UpdateEmailEmployeeRequest;
 import com.matteusmoreno.moto_manager.employee.entity.Employee;
 import com.matteusmoreno.moto_manager.employee.mapper.EmployeeMapper;
 import com.matteusmoreno.moto_manager.employee.repository.EmployeeRepository;
@@ -26,12 +29,14 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
     private final AddressService addressService;
+    private final MailSenderClient mailSenderClient;
 
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, AddressService addressService) {
+    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, AddressService addressService, MailSenderClient mailSenderClient) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
         this.addressService = addressService;
+        this.mailSenderClient = mailSenderClient;
     }
 
     @Transactional
@@ -40,7 +45,7 @@ public class EmployeeService {
         Employee employee = employeeMapper.mapToEmployeeForCreation(request, address);
 
         employeeRepository.save(employee);
-
+        mailSenderClient.employeeCreationEmail(new CreateEmailEmployeeRequest(employee, request));
         return employee;
     }
 
@@ -64,6 +69,7 @@ public class EmployeeService {
 
         employee.setUpdatedAt(LocalDateTime.now());
         employeeRepository.save(employee);
+        mailSenderClient.employeeUpdateEmail(new UpdateEmailEmployeeRequest(employee));
 
         return employee;
     }

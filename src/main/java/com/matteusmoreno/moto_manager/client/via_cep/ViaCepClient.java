@@ -1,4 +1,4 @@
-package com.matteusmoreno.moto_manager.client;
+package com.matteusmoreno.moto_manager.client.via_cep;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

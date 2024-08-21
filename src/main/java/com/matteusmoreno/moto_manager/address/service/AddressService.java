@@ -2,8 +2,8 @@ package com.matteusmoreno.moto_manager.address.service;
 
 import com.matteusmoreno.moto_manager.address.mapper.AddressMapper;
 import com.matteusmoreno.moto_manager.address.repository.AddressRepository;
-import com.matteusmoreno.moto_manager.client.ViaCepClient;
-import com.matteusmoreno.moto_manager.client.ViaCepResponse;
+import com.matteusmoreno.moto_manager.client.via_cep.ViaCepClient;
+import com.matteusmoreno.moto_manager.client.via_cep.ViaCepResponse;
 import com.matteusmoreno.moto_manager.address.entity.Address;
 import com.matteusmoreno.moto_manager.exception.InvalidZipcodeException;
 import lombok.extern.slf4j.Slf4j;

@@ -3,6 +3,8 @@ package com.matteusmoreno.moto_manager.employee.service;
 import com.matteusmoreno.moto_manager.address.entity.Address;
 import com.matteusmoreno.moto_manager.address.response.AddressDetailsResponse;
 import com.matteusmoreno.moto_manager.address.service.AddressService;
+import com.matteusmoreno.moto_manager.client.email_sender.employee_request.CreateEmailEmployeeRequest;
+import com.matteusmoreno.moto_manager.client.email_sender.MailSenderClient;
 import com.matteusmoreno.moto_manager.employee.constant.EmployeeRole;
 import com.matteusmoreno.moto_manager.employee.entity.Employee;
 import com.matteusmoreno.moto_manager.employee.mapper.EmployeeMapper;
@@ -10,8 +12,6 @@ import com.matteusmoreno.moto_manager.employee.repository.EmployeeRepository;
 import com.matteusmoreno.moto_manager.employee.request.CreateEmployeeRequest;
 import com.matteusmoreno.moto_manager.employee.request.UpdateEmployeeRequest;
 import com.matteusmoreno.moto_manager.employee.response.EmployeeDetailsResponse;
-import com.matteusmoreno.moto_manager.product.entity.Product;
-import com.matteusmoreno.moto_manager.product.response.ProductDetailsResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,6 +47,9 @@ class EmployeeServiceTest {
     @Mock
     private AddressService addressService;
 
+    @Mock
+    private MailSenderClient mailSenderClient;
+
     @InjectMocks
     private EmployeeService employeeService;
 
@@ -73,8 +76,11 @@ class EmployeeServiceTest {
         when(addressService.createAddress(request.zipcode(), request.number(), request.complement())).thenReturn(address);
         when(employeeMapper.mapToEmployeeForCreation(request, address)).thenReturn(employee);
 
+
         Employee result = employeeService.createEmployee(request);
 
+        CreateEmailEmployeeRequest expectedRequest = new CreateEmailEmployeeRequest(employee, request);
+        verify(mailSenderClient, times(1)).employeeCreationEmail(expectedRequest);
         verify(addressService, times(1)).createAddress(request.zipcode(), request.number(), request.complement());
         verify(employeeMapper, times(1)).mapToEmployeeForCreation(request, address);
         verify(employeeRepository, times(1)).save(result);

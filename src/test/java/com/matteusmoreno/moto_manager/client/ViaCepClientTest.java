@@ -1,5 +1,7 @@
 package com.matteusmoreno.moto_manager.client;
 
+import com.matteusmoreno.moto_manager.client.via_cep.ViaCepClient;
+import com.matteusmoreno.moto_manager.client.via_cep.ViaCepResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

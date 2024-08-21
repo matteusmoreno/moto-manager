@@ -1,6 +1,6 @@
 package com.matteusmoreno.moto_manager.address.mapper;
 
-import com.matteusmoreno.moto_manager.client.ViaCepResponse;
+import com.matteusmoreno.moto_manager.client.via_cep.ViaCepResponse;
 import com.matteusmoreno.moto_manager.address.entity.Address;
 import org.springframework.stereotype.Component;
 

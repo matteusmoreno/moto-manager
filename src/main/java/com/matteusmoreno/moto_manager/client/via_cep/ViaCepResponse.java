@@ -1,4 +1,4 @@
-package com.matteusmoreno.moto_manager.client;
+package com.matteusmoreno.moto_manager.client.via_cep;
 
 public record ViaCepResponse(
         String cep,
