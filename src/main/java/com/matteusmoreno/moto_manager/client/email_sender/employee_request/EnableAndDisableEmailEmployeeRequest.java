@@ -2,7 +2,7 @@ package com.matteusmoreno.moto_manager.client.email_sender.employee_request;
 
 import com.matteusmoreno.moto_manager.employee.entity.Employee;
 
-public record DisableEmailEmployeeRequest(
+public record EnableAndDisableEmailEmployeeRequest(
         String to,
         String id,
         String employeeName,
@@ -10,7 +10,7 @@ public record DisableEmailEmployeeRequest(
         String cpf,
         String role) {
 
-    public DisableEmailEmployeeRequest(Employee employee) {
+    public EnableAndDisableEmailEmployeeRequest(Employee employee) {
         this(
                 employee.getEmail(),
                 employee.getId().toString(),

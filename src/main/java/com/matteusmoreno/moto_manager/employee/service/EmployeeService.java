@@ -4,7 +4,7 @@ import com.matteusmoreno.moto_manager.address.service.AddressService;
 import com.matteusmoreno.moto_manager.address.entity.Address;
 import com.matteusmoreno.moto_manager.client.email_sender.employee_request.CreateEmailEmployeeRequest;
 import com.matteusmoreno.moto_manager.client.email_sender.MailSenderClient;
-import com.matteusmoreno.moto_manager.client.email_sender.employee_request.DisableEmailEmployeeRequest;
+import com.matteusmoreno.moto_manager.client.email_sender.employee_request.EnableAndDisableEmailEmployeeRequest;
 import com.matteusmoreno.moto_manager.client.email_sender.employee_request.UpdateEmailEmployeeRequest;
 import com.matteusmoreno.moto_manager.employee.entity.Employee;
 import com.matteusmoreno.moto_manager.employee.mapper.EmployeeMapper;
@@ -83,7 +83,7 @@ public class EmployeeService {
         employee.setActive(false);
         employee.setDeletedAt(LocalDateTime.now());
         employeeRepository.save(employee);
-        mailSenderClient.employeeDisableEmail(new DisableEmailEmployeeRequest(employee));
+        mailSenderClient.employeeDisableEmail(new EnableAndDisableEmailEmployeeRequest(employee));
     }
 
     @Transactional
@@ -95,6 +95,7 @@ public class EmployeeService {
         employee.setUpdatedAt(LocalDateTime.now());
         employee.setDeletedAt(null);
         employeeRepository.save(employee);
+        mailSenderClient.employeeEnableEmail(new EnableAndDisableEmailEmployeeRequest(employee));
 
         return employee;
     }
