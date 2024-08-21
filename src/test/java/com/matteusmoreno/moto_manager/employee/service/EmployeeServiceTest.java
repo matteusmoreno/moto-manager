@@ -182,9 +182,9 @@ class EmployeeServiceTest {
         verify(employeeRepository, times(1)).findById(employeeId);
         verify(employeeRepository, times(1)).save(employee);
 
-        assertTrue(employee.getActive());
-        assertNotNull(employee.getUpdatedAt());
-        assertNull(employee.getDeletedAt());
+        assertTrue(result.getActive());
+        assertNotNull(result.getUpdatedAt());
+        assertNull(result.getDeletedAt());
     }
 
 }
