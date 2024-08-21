@@ -2,6 +2,8 @@ package com.matteusmoreno.moto_manager.customer.service;
 
 import com.matteusmoreno.moto_manager.address.repository.AddressRepository;
 import com.matteusmoreno.moto_manager.address.service.AddressService;
+import com.matteusmoreno.moto_manager.client.email_sender.MailSenderClient;
+import com.matteusmoreno.moto_manager.client.email_sender.customer_request.CreateEmailCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.request.MotorcycleCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.request.RemoveCustomerAddressRequest;
 import com.matteusmoreno.moto_manager.customer.request.UpdateCustomerRequest;
@@ -38,23 +40,25 @@ public class CustomerService {
     private final AddressService addressService;
     private final MotorcycleRepository motorcycleRepository;
     private final AddressRepository addressRepository;
+    private final MailSenderClient mailSenderClient;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper, AddressService addressService, MotorcycleRepository motorcycleRepository, AddressRepository addressRepository) {
+    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper, AddressService addressService, MotorcycleRepository motorcycleRepository, AddressRepository addressRepository, MailSenderClient mailSenderClient) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
         this.addressService = addressService;
         this.motorcycleRepository = motorcycleRepository;
         this.addressRepository = addressRepository;
+        this.mailSenderClient = mailSenderClient;
     }
 
     @Transactional
     public Customer createCustomer(CreateCustomerRequest request) {
-
         Address address = addressService.createAddress(request.zipcode(), request.number(), request.complement());
         Customer customer = customerMapper.mapToCustomerForCreation(request, address);
 
         customerRepository.save(customer);
+        mailSenderClient.customerCreationEmail(new CreateEmailCustomerRequest(customer));
 
         return customer;
     }

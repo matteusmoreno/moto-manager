@@ -39,7 +39,7 @@ import static org.mockito.Mockito.*;
 @DisplayName("Service Order Service Tests")
 @ExtendWith(MockitoExtension.class)
 class ServiceOrderServiceTest {
-/*
+
     @Mock
     private ServiceOrderRepository serviceOrderRepository;
 
@@ -75,7 +75,7 @@ class ServiceOrderServiceTest {
         serviceOrder = new ServiceOrder(1L, motorcycle, seller, mechanic, new ArrayList<>(), "troca de pneu e óleo", BigDecimal.TEN, BigDecimal.valueOf(30.00), ServiceOrderStatus.PENDING, LocalDateTime.now(), null, null, null, null);
         request = new CreateServiceOrderRequest(motorcycle.getId(), seller.getId(), mechanic.getId(), new ArrayList<>(), "description", BigDecimal.TEN);
     }
-
+    /*
     @Test
     @DisplayName("Should create a new Service Order successfully")
     void shouldCreateANewServiceOrderSuccessfully() {
@@ -93,8 +93,8 @@ class ServiceOrderServiceTest {
         when(employeeRepository.findById(request.sellerId())).thenReturn(Optional.of(seller));
         when(motorcycleRepository.findById(request.motorcycleId())).thenReturn(Optional.of(motorcycle));
         when(employeeRepository.findById(request.mechanicId())).thenReturn(Optional.of(mechanic));
-        when(serviceOrderProductService.addProduct(oleoMotorRequest, anyLong())).thenReturn(oleoMotorServiceOrderProduct);
-        when(serviceOrderProductService.addProduct(ledLampRequest, anyLong())).thenReturn(ledLampServiceOrderProduct);
+        lenient().when(serviceOrderProductService.addProduct(oleoMotorRequest, serviceOrder.getId())).thenReturn(oleoMotorServiceOrderProduct);
+        lenient().when(serviceOrderProductService.addProduct(ledLampRequest, serviceOrder.getId())).thenReturn(ledLampServiceOrderProduct);
 
 
         ServiceOrder result = serviceOrderService.createServiceOrder(request);
@@ -111,5 +111,5 @@ class ServiceOrderServiceTest {
 
     }
 
- */
+     */
 }
