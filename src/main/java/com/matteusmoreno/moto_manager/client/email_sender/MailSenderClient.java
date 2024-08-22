@@ -1,6 +1,7 @@
 package com.matteusmoreno.moto_manager.client.email_sender;
 
 import com.matteusmoreno.moto_manager.client.email_sender.customer_request.CreateEmailCustomerRequest;
+import com.matteusmoreno.moto_manager.client.email_sender.customer_request.EnableAndDisableEmailCustomerRequest;
 import com.matteusmoreno.moto_manager.client.email_sender.customer_request.UpdateEmailCustomerRequest;
 import com.matteusmoreno.moto_manager.client.email_sender.employee_request.CreateEmailEmployeeRequest;
 import com.matteusmoreno.moto_manager.client.email_sender.employee_request.EnableAndDisableEmailEmployeeRequest;
@@ -32,4 +33,7 @@ public interface MailSenderClient {
 
     @PostMapping("/email/customer-update")
     void customerUpdateEmail(@RequestBody @Valid UpdateEmailCustomerRequest request);
+
+    @PostMapping("/email/customer-disable")
+    void customerDisableEmail(@RequestBody @Valid EnableAndDisableEmailCustomerRequest request);
 }

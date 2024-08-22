@@ -4,7 +4,9 @@ import com.matteusmoreno.moto_manager.address.repository.AddressRepository;
 import com.matteusmoreno.moto_manager.address.service.AddressService;
 import com.matteusmoreno.moto_manager.client.email_sender.MailSenderClient;
 import com.matteusmoreno.moto_manager.client.email_sender.customer_request.CreateEmailCustomerRequest;
+import com.matteusmoreno.moto_manager.client.email_sender.customer_request.EnableAndDisableEmailCustomerRequest;
 import com.matteusmoreno.moto_manager.client.email_sender.customer_request.UpdateEmailCustomerRequest;
+import com.matteusmoreno.moto_manager.client.email_sender.employee_request.EnableAndDisableEmailEmployeeRequest;
 import com.matteusmoreno.moto_manager.customer.request.MotorcycleCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.request.RemoveCustomerAddressRequest;
 import com.matteusmoreno.moto_manager.customer.request.UpdateCustomerRequest;
@@ -96,6 +98,7 @@ public class CustomerService {
         customer.setActive(false);
         customer.setDeletedAt(LocalDateTime.now());
         customerRepository.save(customer);
+        mailSenderClient.customerDisableEmail(new EnableAndDisableEmailCustomerRequest(customer));
     }
 
     @Transactional
