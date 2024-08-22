@@ -110,6 +110,7 @@ public class CustomerService {
         customer.setDeletedAt(null);
         customer.setUpdatedAt(LocalDateTime.now());
         customerRepository.save(customer);
+        mailSenderClient.customerEnableEmail(new EnableAndDisableEmailCustomerRequest(customer));
 
         return customer;
     }

@@ -36,4 +36,7 @@ public interface MailSenderClient {
 
     @PostMapping("/email/customer-disable")
     void customerDisableEmail(@RequestBody @Valid EnableAndDisableEmailCustomerRequest request);
+
+    @PostMapping("/email/customer-enable")
+    void customerEnableEmail(@RequestBody @Valid EnableAndDisableEmailCustomerRequest request);
 }

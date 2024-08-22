@@ -11,8 +11,7 @@ public record EnableAndDisableEmailCustomerRequest(
         String age,
         String phone,
         String createdAt,
-        String updatedAt,
-        String deletedAt) {
+        String updatedAt) {
 
     public EnableAndDisableEmailCustomerRequest(Customer customer) {
         this(
@@ -24,8 +23,7 @@ public record EnableAndDisableEmailCustomerRequest(
                 customer.getAge().toString(),
                 customer.getPhone(),
                 customer.getCreatedAt().toLocalDate().toString(),
-                customer.getUpdatedAt().toLocalDate().toString(),
-                customer.getDeletedAt().toLocalDate().toString()
+                customer.getUpdatedAt().toLocalDate().toString()
         );
     }
 }
