@@ -4,6 +4,10 @@ import com.matteusmoreno.moto_manager.address.entity.Address;
 import com.matteusmoreno.moto_manager.address.repository.AddressRepository;
 import com.matteusmoreno.moto_manager.address.request.AddressCustomerRequest;
 import com.matteusmoreno.moto_manager.address.service.AddressService;
+import com.matteusmoreno.moto_manager.client.email_sender.MailSenderClient;
+import com.matteusmoreno.moto_manager.client.email_sender.customer_request.CreateEmailCustomerRequest;
+import com.matteusmoreno.moto_manager.client.email_sender.customer_request.EnableAndDisableEmailCustomerRequest;
+import com.matteusmoreno.moto_manager.client.email_sender.customer_request.UpdateEmailCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.entity.Customer;
 import com.matteusmoreno.moto_manager.customer.mapper.CustomerMapper;
 import com.matteusmoreno.moto_manager.customer.repository.CustomerRepository;
@@ -61,6 +65,9 @@ class CustomerServiceTest {
     @Mock
     private AddressRepository addressRepository;
 
+    @Mock
+    private MailSenderClient mailSenderClient;
+
     @InjectMocks
     private CustomerService customerService;
 
@@ -76,21 +83,13 @@ class CustomerServiceTest {
     void setup() {
         customerId = UUID.randomUUID();
         motorcycleId = UUID.randomUUID();
-
         address = new Address(1L, "28994-675", "Street", "Neighborhood", "City", "State", "21", "Casa", LocalDateTime.now());
-
-
-        customer = new Customer(customerId, "Name", "email@email.com", LocalDate.of(1990, 8, 28), 33,
-                "(99)999999999", new ArrayList<>(), new ArrayList<>(), LocalDateTime.now(), null, null, true);
+        customer = new Customer(customerId, "Name", "email@email.com", LocalDate.of(1990, 8, 28), 33, "(99)999999999", new ArrayList<>(), new ArrayList<>(), LocalDateTime.now(), null, null, true);
 
         customer.getAddresses().add(address);
 
-        createRequest = new CreateCustomerRequest("Name", "email@email.com", LocalDate.of(1990, 8, 28),
-                "(99)999999999", "28994-675", "21", "Casa");
-
-        motorcycle = new Motorcycle(motorcycleId, MotorcycleBrand.HONDA, "Model", MotorcycleColor.BLACK, "KKK0000", "2012",
-                null, LocalDateTime.now(), null, null, true);
-
+        createRequest = new CreateCustomerRequest("Name", "email@email.com", LocalDate.of(1990, 8, 28), "(99)999999999", "28994-675", "21", "Casa");
+        motorcycle = new Motorcycle(motorcycleId, MotorcycleBrand.HONDA, "Model", MotorcycleColor.BLACK, "KKK0000", "2012", null, LocalDateTime.now(), null, null, true);
         motorcycleCustomerRequest = new MotorcycleCustomerRequest(customerId, motorcycleId);
     }
 
@@ -133,7 +132,6 @@ class CustomerServiceTest {
         CustomerDetailsResponse response = responsePage.getContent().get(0);
 
         assertEquals(1, responsePage.getTotalElements());
-        //ASSERTIONS
         assertEquals(customer.getName(), response.name());
         assertEquals(customer.getEmail(), response.email());
         assertEquals(customer.getBirthDate(), response.birthDate());
@@ -159,6 +157,9 @@ class CustomerServiceTest {
 
         Customer result = customerService.updateCustomer(updateRequest);
 
+
+        UpdateEmailCustomerRequest expectedRequest = new UpdateEmailCustomerRequest(customer);
+        verify(mailSenderClient, times(1)).customerUpdateEmail(expectedRequest);
         verify(customerRepository, times(1)).findById(updateRequest.id());
         verify(customerRepository, times(1)).save(result);
 
@@ -178,6 +179,8 @@ class CustomerServiceTest {
 
         customerService.disableCustomer(customerId);
 
+        EnableAndDisableEmailCustomerRequest expectedRequest = new EnableAndDisableEmailCustomerRequest(customer);
+        verify(mailSenderClient, times(1)).customerDisableEmail(expectedRequest);
         verify(customerRepository, times(1)).findById(customerId);
         verify(customerRepository, times(1)).save(customer);
 

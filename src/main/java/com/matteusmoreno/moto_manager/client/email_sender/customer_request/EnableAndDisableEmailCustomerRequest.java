@@ -9,9 +9,7 @@ public record EnableAndDisableEmailCustomerRequest(
         String email,
         String birthDate,
         String age,
-        String phone,
-        String createdAt,
-        String updatedAt) {
+        String phone) {
 
     public EnableAndDisableEmailCustomerRequest(Customer customer) {
         this(
@@ -21,9 +19,7 @@ public record EnableAndDisableEmailCustomerRequest(
                 customer.getEmail(),
                 customer.getBirthDate().toString(),
                 customer.getAge().toString(),
-                customer.getPhone(),
-                customer.getCreatedAt().toLocalDate().toString(),
-                customer.getUpdatedAt().toLocalDate().toString()
+                customer.getPhone()
         );
     }
 }
