@@ -4,7 +4,9 @@ import com.matteusmoreno.moto_manager.exception.SupplierAlreadyExistsException;
 import com.matteusmoreno.moto_manager.supplier.request.CreateSupplierRequest;
 import com.matteusmoreno.moto_manager.supplier.entity.Supplier;
 import com.matteusmoreno.moto_manager.supplier.repository.SupplierRepository;
+import com.matteusmoreno.moto_manager.supplier.request.UpdateSupplierRequest;
 import com.matteusmoreno.moto_manager.supplier.response.SupplierListResponse;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,5 +49,20 @@ public class SupplierService {
 
     public Page<SupplierListResponse> listAllSuppliers(Pageable pageable) {
         return supplierRepository.findAll(pageable).map(SupplierListResponse::new);
+    }
+
+    public Supplier updateSupplier(UpdateSupplierRequest request) {
+        Supplier supplier = supplierRepository.findById(request.id())
+                .orElseThrow(() -> new EntityNotFoundException("Supplier not found"));
+
+        if (request.name() != null) supplier.setName(request.name().toUpperCase());
+        if (request.cnpj() != null) supplier.setCnpj(request.cnpj());
+        if (request.phone() != null) supplier.setPhone(request.phone());
+        if (request.email() != null) supplier.setEmail(request.email());
+
+        supplier.setUpdatedAt(LocalDateTime.now());
+        supplierRepository.save(supplier);
+
+        return supplier;
     }
 }

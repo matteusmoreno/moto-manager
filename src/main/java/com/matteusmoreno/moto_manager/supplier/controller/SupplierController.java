@@ -2,6 +2,7 @@ package com.matteusmoreno.moto_manager.supplier.controller;
 
 import com.matteusmoreno.moto_manager.supplier.request.CreateSupplierRequest;
 import com.matteusmoreno.moto_manager.supplier.entity.Supplier;
+import com.matteusmoreno.moto_manager.supplier.request.UpdateSupplierRequest;
 import com.matteusmoreno.moto_manager.supplier.response.SupplierDetailsResponse;
 import com.matteusmoreno.moto_manager.supplier.response.SupplierListResponse;
 import com.matteusmoreno.moto_manager.supplier.service.SupplierService;
@@ -40,5 +41,12 @@ public class SupplierController {
         Page<SupplierListResponse> page = supplierService.listAllSuppliers(pageable);
 
         return ResponseEntity.ok(page);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<SupplierDetailsResponse> update(@RequestBody @Valid UpdateSupplierRequest request) {
+        Supplier supplier = supplierService.updateSupplier(request);
+
+        return ResponseEntity.ok(new SupplierDetailsResponse(supplier));
     }
 }
