@@ -1,5 +1,6 @@
-package com.matteusmoreno.moto_manager.payable;
+package com.matteusmoreno.moto_manager.payable.entity;
 
+import com.matteusmoreno.moto_manager.payable.PaymentStatus;
 import com.matteusmoreno.moto_manager.supplier.entity.Supplier;
 import jakarta.persistence.*;
 import lombok.*;

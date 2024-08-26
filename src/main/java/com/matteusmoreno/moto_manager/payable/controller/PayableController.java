@@ -1,8 +1,12 @@
-package com.matteusmoreno.moto_manager.payable;
+package com.matteusmoreno.moto_manager.payable.controller;
 
+import com.matteusmoreno.moto_manager.payable.request.UpdatePayableRequest;
+import com.matteusmoreno.moto_manager.payable.response.PayableDetailsResponse;
+import com.matteusmoreno.moto_manager.payable.service.PayableService;
+import com.matteusmoreno.moto_manager.payable.entity.Payable;
+import com.matteusmoreno.moto_manager.payable.request.CreatePayableRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +39,12 @@ public class PayableController {
         Page<PayableDetailsResponse> page = payableService.findAllPayables(pageable);
 
         return ResponseEntity.ok(page);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<PayableDetailsResponse> update(@RequestBody @Valid UpdatePayableRequest request) {
+        Payable payable = payableService.updatePayable(request);
+
+        return ResponseEntity.ok(new PayableDetailsResponse(payable));
     }
 }

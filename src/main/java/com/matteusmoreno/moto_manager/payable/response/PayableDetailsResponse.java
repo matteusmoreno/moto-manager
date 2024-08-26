@@ -1,4 +1,6 @@
-package com.matteusmoreno.moto_manager.payable;
+package com.matteusmoreno.moto_manager.payable.response;
+
+import com.matteusmoreno.moto_manager.payable.entity.Payable;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
