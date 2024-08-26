@@ -4,7 +4,10 @@ import com.matteusmoreno.moto_manager.exception.SupplierAlreadyExistsException;
 import com.matteusmoreno.moto_manager.supplier.request.CreateSupplierRequest;
 import com.matteusmoreno.moto_manager.supplier.entity.Supplier;
 import com.matteusmoreno.moto_manager.supplier.repository.SupplierRepository;
+import com.matteusmoreno.moto_manager.supplier.response.SupplierListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -40,5 +43,9 @@ public class SupplierService {
         supplierRepository.save(supplier);
 
         return supplier;
+    }
+
+    public Page<SupplierListResponse> listAllSuppliers(Pageable pageable) {
+        return supplierRepository.findAll(pageable).map(SupplierListResponse::new);
     }
 }
