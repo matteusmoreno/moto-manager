@@ -79,6 +79,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/suppliers/disable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
                         .requestMatchers("/suppliers/enable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
 
+                        .requestMatchers("/payables/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
+
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))

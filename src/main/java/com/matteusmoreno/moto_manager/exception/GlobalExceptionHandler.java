@@ -81,4 +81,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleSupplierAlreadyExistsException(SupplierAlreadyExistsException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(InvalidDueDateException.class)
+    public ResponseEntity<String> handleInvalidDueDateException(InvalidDueDateException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
