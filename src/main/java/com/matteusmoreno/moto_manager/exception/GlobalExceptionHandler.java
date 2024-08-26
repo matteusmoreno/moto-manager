@@ -76,4 +76,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleAddressNotOwnedByCustomerException(AddressNotOwnedByCustomerException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(SupplierAlreadyExistsException.class)
+    public ResponseEntity<String> handleSupplierAlreadyExistsException(SupplierAlreadyExistsException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

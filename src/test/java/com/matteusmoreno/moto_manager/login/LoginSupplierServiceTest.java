@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Login Service Tests")
-class LoginServiceTest {
+class LoginSupplierServiceTest {
 
     @Mock
     private Jwt mockJwt;

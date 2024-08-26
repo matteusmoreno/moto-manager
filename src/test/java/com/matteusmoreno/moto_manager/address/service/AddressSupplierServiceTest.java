@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Address Service Tests")
-class AddressServiceTest {
+class AddressSupplierServiceTest {
 
     @Mock
     private AddressMapper addressMapper;
