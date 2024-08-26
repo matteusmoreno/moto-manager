@@ -5,6 +5,8 @@ import com.matteusmoreno.moto_manager.supplier.entity.Supplier;
 import com.matteusmoreno.moto_manager.supplier.repository.SupplierRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,5 +49,9 @@ public class PayableService {
 
         payableRepository.save(payable);
         return payable;
+    }
+
+    public Page<PayableDetailsResponse> findAllPayables(Pageable pageable) {
+        return payableRepository.findAll(pageable).map(PayableDetailsResponse::new);
     }
 }

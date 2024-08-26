@@ -3,11 +3,10 @@ package com.matteusmoreno.moto_manager.payable;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -29,5 +28,12 @@ public class PayableController {
         URI uri = uriBuilder.path("/payables/{id}").buildAndExpand(payable.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new PayableDetailsResponse(payable));
+    }
+
+    @GetMapping("/find-all")
+    public ResponseEntity<Page<PayableDetailsResponse>> findAll(Pageable pageable) {
+        Page<PayableDetailsResponse> page = payableService.findAllPayables(pageable);
+
+        return ResponseEntity.ok(page);
     }
 }
