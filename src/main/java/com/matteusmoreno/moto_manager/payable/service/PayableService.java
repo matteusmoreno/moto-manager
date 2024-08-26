@@ -1,6 +1,8 @@
 package com.matteusmoreno.moto_manager.payable.service;
 
 import com.matteusmoreno.moto_manager.exception.InvalidDueDateException;
+import com.matteusmoreno.moto_manager.exception.PayableAlreadyCanceledException;
+import com.matteusmoreno.moto_manager.exception.PayableAlreadyPaidException;
 import com.matteusmoreno.moto_manager.payable.response.PayableDetailsResponse;
 import com.matteusmoreno.moto_manager.payable.repository.PayableRepository;
 import com.matteusmoreno.moto_manager.payable.PaymentStatus;
@@ -95,9 +97,35 @@ public class PayableService {
     }
 
     @Transactional
+    public Payable payPayable(Long id) {
+        Payable payable = payableRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Payable not found"));
+
+        if (payable.getStatus() == PaymentStatus.PAID) {
+            throw new PayableAlreadyPaidException("Payable is already paid");
+        }
+        if (payable.getStatus() == PaymentStatus.CANCELED) {
+            throw new PayableAlreadyCanceledException("Payable is canceled");
+        }
+
+        payable.setPaymentDate(LocalDate.now());
+        payable.setStatus(PaymentStatus.PAID);
+        payableRepository.save(payable);
+
+        return payable;
+    }
+
+    @Transactional
     public Payable cancelPayable(Long id) {
         Payable payable = payableRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Payable not found"));
+
+        if (payable.getStatus() == PaymentStatus.PAID) {
+            throw new PayableAlreadyPaidException("Payable is already paid");
+        }
+        if (payable.getStatus() == PaymentStatus.CANCELED) {
+            throw new PayableAlreadyCanceledException("Payable is canceled");
+        }
 
         payable.setStatus(PaymentStatus.CANCELED);
         payableRepository.save(payable);

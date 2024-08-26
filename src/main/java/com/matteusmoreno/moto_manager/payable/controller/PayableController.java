@@ -48,6 +48,13 @@ public class PayableController {
         return ResponseEntity.ok(new PayableDetailsResponse(payable));
     }
 
+    @PatchMapping("/pay/{id}")
+    public ResponseEntity<PayableDetailsResponse> pay(@PathVariable Long id) {
+        Payable payable = payableService.payPayable(id);
+
+        return ResponseEntity.ok(new PayableDetailsResponse(payable));
+    }
+
     @PatchMapping("/cancel/{id}")
     public ResponseEntity<PayableDetailsResponse> cancel(@PathVariable Long id) {
         Payable payable = payableService.cancelPayable(id);

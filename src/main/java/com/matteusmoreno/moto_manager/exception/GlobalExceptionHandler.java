@@ -86,4 +86,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleInvalidDueDateException(InvalidDueDateException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(PayableAlreadyPaidException.class)
+    public ResponseEntity<String> handlePayableAlreadyPaidException(PayableAlreadyPaidException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PayableAlreadyCanceledException.class)
+    public ResponseEntity<String> handlePayableAlreadyCanceledException(PayableAlreadyCanceledException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
