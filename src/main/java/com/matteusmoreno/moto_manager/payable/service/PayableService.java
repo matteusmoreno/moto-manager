@@ -93,4 +93,15 @@ public class PayableService {
 
         return payable;
     }
+
+    @Transactional
+    public Payable cancelPayable(Long id) {
+        Payable payable = payableRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Payable not found"));
+
+        payable.setStatus(PaymentStatus.CANCELED);
+        payableRepository.save(payable);
+
+        return payable;
+    }
 }
