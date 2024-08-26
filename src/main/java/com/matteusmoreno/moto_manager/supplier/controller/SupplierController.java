@@ -49,4 +49,11 @@ public class SupplierController {
 
         return ResponseEntity.ok(new SupplierDetailsResponse(supplier));
     }
+
+    @DeleteMapping("/disable/{id}")
+    public ResponseEntity<Void> disable(@PathVariable Long id) {
+        supplierService.disableSupplier(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -51,6 +51,7 @@ public class SupplierService {
         return supplierRepository.findAll(pageable).map(SupplierListResponse::new);
     }
 
+    @Transactional
     public Supplier updateSupplier(UpdateSupplierRequest request) {
         Supplier supplier = supplierRepository.findById(request.id())
                 .orElseThrow(() -> new EntityNotFoundException("Supplier not found"));
@@ -64,5 +65,15 @@ public class SupplierService {
         supplierRepository.save(supplier);
 
         return supplier;
+    }
+
+    @Transactional
+    public void disableSupplier(Long id) {
+        Supplier supplier = supplierRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Supplier not found"));
+
+        supplier.setActive(false);
+        supplier.setDeletedAt(LocalDateTime.now());
+        supplierRepository.save(supplier);
     }
 }

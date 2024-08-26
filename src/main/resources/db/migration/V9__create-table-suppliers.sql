@@ -1,7 +1,6 @@
 CREATE TABLE suppliers(
     id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL UNIQUE,
     name VARCHAR(255),
-    address VARCHAR(255),
     phone VARCHAR(255),
     email VARCHAR(255),
     created_at TIMESTAMP NOT NULL,
