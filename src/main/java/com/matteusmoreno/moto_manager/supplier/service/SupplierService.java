@@ -76,4 +76,17 @@ public class SupplierService {
         supplier.setDeletedAt(LocalDateTime.now());
         supplierRepository.save(supplier);
     }
+
+    @Transactional
+    public Supplier enableSupplier(Long id) {
+        Supplier supplier = supplierRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Supplier not found"));
+
+        supplier.setActive(true);
+        supplier.setDeletedAt(null);
+        supplier.setUpdatedAt(LocalDateTime.now());
+        supplierRepository.save(supplier);
+
+        return supplier;
+    }
 }

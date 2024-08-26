@@ -76,6 +76,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/suppliers/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
                         .requestMatchers("/suppliers/find-all").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
                         .requestMatchers("/suppliers/update").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
+                        .requestMatchers("/suppliers/disable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
+                        .requestMatchers("/suppliers/enable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
 
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)

@@ -56,4 +56,11 @@ public class SupplierController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/enable/{id}")
+    public ResponseEntity<SupplierDetailsResponse> enable(@PathVariable Long id) {
+        Supplier supplier = supplierService.enableSupplier(id);
+
+        return ResponseEntity.ok(new SupplierDetailsResponse(supplier));
+    }
 }
