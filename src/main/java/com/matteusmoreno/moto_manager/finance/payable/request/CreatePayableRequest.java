@@ -1,4 +1,4 @@
-package com.matteusmoreno.moto_manager.payable.request;
+package com.matteusmoreno.moto_manager.finance.payable.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;

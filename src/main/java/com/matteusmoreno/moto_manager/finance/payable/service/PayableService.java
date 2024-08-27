@@ -1,14 +1,14 @@
-package com.matteusmoreno.moto_manager.payable.service;
+package com.matteusmoreno.moto_manager.finance.payable.service;
 
 import com.matteusmoreno.moto_manager.exception.InvalidDueDateException;
 import com.matteusmoreno.moto_manager.exception.PayableAlreadyCanceledException;
 import com.matteusmoreno.moto_manager.exception.PayableAlreadyPaidException;
-import com.matteusmoreno.moto_manager.payable.response.PayableDetailsResponse;
-import com.matteusmoreno.moto_manager.payable.repository.PayableRepository;
-import com.matteusmoreno.moto_manager.payable.PaymentStatus;
-import com.matteusmoreno.moto_manager.payable.entity.Payable;
-import com.matteusmoreno.moto_manager.payable.request.CreatePayableRequest;
-import com.matteusmoreno.moto_manager.payable.request.UpdatePayableRequest;
+import com.matteusmoreno.moto_manager.finance.payable.response.PayableDetailsResponse;
+import com.matteusmoreno.moto_manager.finance.payable.repository.PayableRepository;
+import com.matteusmoreno.moto_manager.finance.constant.PaymentStatus;
+import com.matteusmoreno.moto_manager.finance.payable.entity.Payable;
+import com.matteusmoreno.moto_manager.finance.payable.request.CreatePayableRequest;
+import com.matteusmoreno.moto_manager.finance.payable.request.UpdatePayableRequest;
 import com.matteusmoreno.moto_manager.supplier.entity.Supplier;
 import com.matteusmoreno.moto_manager.supplier.repository.SupplierRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -49,7 +49,7 @@ public class PayableService {
 
         Payable payable = Payable.builder()
                 .supplier(supplier)
-                .description(request.description())
+                .description(request.description().toUpperCase())
                 .value(request.value())
                 .issueDate(request.issueDate())
                 .dueDate(request.dueDate())

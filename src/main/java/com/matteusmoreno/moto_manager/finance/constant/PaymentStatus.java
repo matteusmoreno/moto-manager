@@ -1,4 +1,4 @@
-package com.matteusmoreno.moto_manager.payable;
+package com.matteusmoreno.moto_manager.finance.constant;
 
 import lombok.Getter;
 

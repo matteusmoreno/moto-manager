@@ -1,6 +1,6 @@
-package com.matteusmoreno.moto_manager.payable.entity;
+package com.matteusmoreno.moto_manager.finance.payable.entity;
 
-import com.matteusmoreno.moto_manager.payable.PaymentStatus;
+import com.matteusmoreno.moto_manager.finance.constant.PaymentStatus;
 import com.matteusmoreno.moto_manager.supplier.entity.Supplier;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,5 +25,6 @@ public class Payable {
     private LocalDate issueDate;
     private LocalDate dueDate;
     private LocalDate paymentDate;
+    @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 }

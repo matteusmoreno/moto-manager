@@ -1,10 +1,10 @@
-package com.matteusmoreno.moto_manager.payable.controller;
+package com.matteusmoreno.moto_manager.finance.payable.controller;
 
-import com.matteusmoreno.moto_manager.payable.request.UpdatePayableRequest;
-import com.matteusmoreno.moto_manager.payable.response.PayableDetailsResponse;
-import com.matteusmoreno.moto_manager.payable.service.PayableService;
-import com.matteusmoreno.moto_manager.payable.entity.Payable;
-import com.matteusmoreno.moto_manager.payable.request.CreatePayableRequest;
+import com.matteusmoreno.moto_manager.finance.payable.request.UpdatePayableRequest;
+import com.matteusmoreno.moto_manager.finance.payable.response.PayableDetailsResponse;
+import com.matteusmoreno.moto_manager.finance.payable.service.PayableService;
+import com.matteusmoreno.moto_manager.finance.payable.entity.Payable;
+import com.matteusmoreno.moto_manager.finance.payable.request.CreatePayableRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

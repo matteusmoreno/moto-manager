@@ -4,6 +4,7 @@ import com.matteusmoreno.moto_manager.employee.constant.EmployeeRole;
 import com.matteusmoreno.moto_manager.employee.entity.Employee;
 import com.matteusmoreno.moto_manager.employee.repository.EmployeeRepository;
 import com.matteusmoreno.moto_manager.exception.MotorcycleNotAssignedException;
+import com.matteusmoreno.moto_manager.finance.receivable.service.ReceivableService;
 import com.matteusmoreno.moto_manager.motorcycle.entity.Motorcycle;
 import com.matteusmoreno.moto_manager.motorcycle.repository.MotorcycleRepository;
 import com.matteusmoreno.moto_manager.service_order.constant.ServiceOrderStatus;
@@ -30,13 +31,15 @@ public class ServiceOrderService {
     private final EmployeeRepository employeeRepository;
     private final MotorcycleRepository motorcycleRepository;
     private final ServiceOrderProductService serviceOrderProductService;
+    private final ReceivableService receivableService;
 
     @Autowired
-    public ServiceOrderService(ServiceOrderRepository serviceOrderRepository, EmployeeRepository employeeRepository, MotorcycleRepository motorcycleRepository, ServiceOrderProductService serviceOrderProductService) {
+    public ServiceOrderService(ServiceOrderRepository serviceOrderRepository, EmployeeRepository employeeRepository, MotorcycleRepository motorcycleRepository, ServiceOrderProductService serviceOrderProductService, ReceivableService receivableService) {
         this.serviceOrderRepository = serviceOrderRepository;
         this.employeeRepository = employeeRepository;
         this.motorcycleRepository = motorcycleRepository;
         this.serviceOrderProductService = serviceOrderProductService;
+        this.receivableService = receivableService;
     }
 
     @Transactional
@@ -112,6 +115,7 @@ public class ServiceOrderService {
         serviceOrder.setCompletedAt(LocalDateTime.now());
 
         serviceOrderRepository.save(serviceOrder);
+        receivableService.createReceivable(serviceOrder);
 
         return serviceOrder;
     }
