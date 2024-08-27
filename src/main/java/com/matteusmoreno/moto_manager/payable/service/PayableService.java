@@ -15,10 +15,12 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class PayableService {
@@ -131,5 +133,16 @@ public class PayableService {
         payableRepository.save(payable);
 
         return payable;
+    }
+
+    // Atualiza o status de payables para OVERDUE todos os dias às 00:00
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    public void updateOverduePayables() {
+        List<Payable> overduePayables = payableRepository.findByStatusAndDueDateBefore(PaymentStatus.PENDING, LocalDate.now());
+        for (Payable payable : overduePayables) {
+            payable.setStatus(PaymentStatus.OVERDUE);
+            payableRepository.save(payable);
+        }
     }
 }
