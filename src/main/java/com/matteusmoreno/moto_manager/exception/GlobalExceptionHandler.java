@@ -96,4 +96,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handlePayableAlreadyCanceledException(PayableAlreadyCanceledException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ServiceOrderStatusException.class)
+    public ResponseEntity<String> handleServiceOrderStatusException(ServiceOrderStatusException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PaymentStatusException.class)
+    public ResponseEntity<String> handlePaymentStatusException(PaymentStatusException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

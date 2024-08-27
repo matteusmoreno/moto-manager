@@ -4,6 +4,7 @@ import com.matteusmoreno.moto_manager.employee.constant.EmployeeRole;
 import com.matteusmoreno.moto_manager.employee.entity.Employee;
 import com.matteusmoreno.moto_manager.employee.repository.EmployeeRepository;
 import com.matteusmoreno.moto_manager.exception.MotorcycleNotAssignedException;
+import com.matteusmoreno.moto_manager.exception.ServiceOrderStatusException;
 import com.matteusmoreno.moto_manager.finance.receivable.service.ReceivableService;
 import com.matteusmoreno.moto_manager.motorcycle.entity.Motorcycle;
 import com.matteusmoreno.moto_manager.motorcycle.repository.MotorcycleRepository;
@@ -98,6 +99,8 @@ public class ServiceOrderService {
         ServiceOrder serviceOrder = serviceOrderRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Service order not found"));
 
+        if (serviceOrder.getServiceOrderStatus() != ServiceOrderStatus.PENDING) throw new ServiceOrderStatusException("Service order is not pending");
+
         serviceOrder.setServiceOrderStatus(ServiceOrderStatus.IN_PROGRESS);
         serviceOrder.setStartedAt(LocalDateTime.now());
 
@@ -110,6 +113,8 @@ public class ServiceOrderService {
     public ServiceOrder completeServiceOrder(Long id) {
         ServiceOrder serviceOrder = serviceOrderRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Service order not found"));
+
+        if (serviceOrder.getServiceOrderStatus() != ServiceOrderStatus.IN_PROGRESS) throw new ServiceOrderStatusException("Service order is not in progress");
 
         serviceOrder.setServiceOrderStatus(ServiceOrderStatus.COMPLETED);
         serviceOrder.setCompletedAt(LocalDateTime.now());
@@ -124,6 +129,12 @@ public class ServiceOrderService {
     public ServiceOrder cancelServiceOrder(Long id) {
         ServiceOrder serviceOrder = serviceOrderRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Service order not found"));
+
+        if (serviceOrder.getServiceOrderStatus() == ServiceOrderStatus.CANCELED) throw new ServiceOrderStatusException("Service order is already canceled");
+
+        if (serviceOrder.getServiceOrderStatus() == ServiceOrderStatus.COMPLETED) {
+            receivableService.cancelReceivable(serviceOrder);
+        }
 
         serviceOrder.setServiceOrderStatus(ServiceOrderStatus.CANCELED);
         serviceOrder.setCanceledAt(LocalDateTime.now());

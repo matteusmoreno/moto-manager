@@ -1,5 +1,6 @@
 package com.matteusmoreno.moto_manager.finance.receivable.service;
 
+import com.matteusmoreno.moto_manager.exception.PaymentStatusException;
 import com.matteusmoreno.moto_manager.finance.constant.PaymentStatus;
 import com.matteusmoreno.moto_manager.finance.receivable.entity.Receivable;
 import com.matteusmoreno.moto_manager.finance.receivable.repository.ReceivableRepository;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 @Service
 public class ReceivableService {
@@ -42,9 +45,20 @@ public class ReceivableService {
     public Receivable payReceivable(Long receivableId) {
         Receivable receivable = receivableRepository.findById(receivableId)
                 .orElseThrow(() -> new RuntimeException("Receivable not found"));
+
+        if (receivable.getStatus() != PaymentStatus.PENDING) throw new PaymentStatusException("Receivable is not pending");
+
         receivable.setStatus(PaymentStatus.PAID);
+        receivable.setPaymentDate(LocalDate.now());
         receivableRepository.save(receivable);
 
         return receivable;
+    }
+
+    @Transactional
+    public void cancelReceivable(ServiceOrder serviceOrder) {
+        Receivable receivable = receivableRepository.findByServiceOrder(serviceOrder);
+        receivable.setStatus(PaymentStatus.CANCELED);
+        receivableRepository.save(receivable);
     }
 }
