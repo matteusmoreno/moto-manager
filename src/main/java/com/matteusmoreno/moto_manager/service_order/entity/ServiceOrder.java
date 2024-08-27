@@ -33,7 +33,7 @@ public class ServiceOrder {
     private Employee mechanic;
 
     @OneToMany(mappedBy = "serviceOrder", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ServiceOrderProduct> products = new ArrayList<>();  // Certifique-se de que a lista é mutável
+    private List<ServiceOrderProduct> products = new ArrayList<>();
 
     private String description;
     private BigDecimal laborPrice;

@@ -3,8 +3,11 @@ package com.matteusmoreno.moto_manager.finance.receivable.service;
 import com.matteusmoreno.moto_manager.finance.constant.PaymentStatus;
 import com.matteusmoreno.moto_manager.finance.receivable.entity.Receivable;
 import com.matteusmoreno.moto_manager.finance.receivable.repository.ReceivableRepository;
+import com.matteusmoreno.moto_manager.finance.receivable.response.ReceivableDetailsResponse;
 import com.matteusmoreno.moto_manager.service_order.entity.ServiceOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,5 +32,9 @@ public class ReceivableService {
                 .build();
 
         receivableRepository.save(receivable);
+    }
+
+    public Page<ReceivableDetailsResponse> findAllReceivables(Pageable pageable) {
+        return  receivableRepository.findAll(pageable).map(ReceivableDetailsResponse::new);
     }
 }
