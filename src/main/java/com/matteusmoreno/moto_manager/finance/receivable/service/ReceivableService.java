@@ -37,4 +37,14 @@ public class ReceivableService {
     public Page<ReceivableDetailsResponse> findAllReceivables(Pageable pageable) {
         return  receivableRepository.findAll(pageable).map(ReceivableDetailsResponse::new);
     }
+
+    @Transactional
+    public Receivable payReceivable(Long receivableId) {
+        Receivable receivable = receivableRepository.findById(receivableId)
+                .orElseThrow(() -> new RuntimeException("Receivable not found"));
+        receivable.setStatus(PaymentStatus.PAID);
+        receivableRepository.save(receivable);
+
+        return receivable;
+    }
 }
