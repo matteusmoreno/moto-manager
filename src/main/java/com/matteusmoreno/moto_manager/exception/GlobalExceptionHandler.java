@@ -106,4 +106,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handlePaymentStatusException(PaymentStatusException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(PdfReportGenerationException.class)
+    public ResponseEntity<String> handlePdfReportGenerationException(PdfReportGenerationException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

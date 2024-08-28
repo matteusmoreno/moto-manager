@@ -1,16 +1,22 @@
 package com.matteusmoreno.moto_manager.finance.service;
 
+import com.lowagie.text.DocumentException;
+import com.matteusmoreno.moto_manager.exception.PdfReportGenerationException;
+import com.matteusmoreno.moto_manager.finance.PdfReportGenerator;
 import com.matteusmoreno.moto_manager.finance.entity.Finance;
 import com.matteusmoreno.moto_manager.finance.payable.entity.Payable;
 import com.matteusmoreno.moto_manager.finance.payable.repository.PayableRepository;
 import com.matteusmoreno.moto_manager.finance.receivable.entity.Receivable;
 import com.matteusmoreno.moto_manager.finance.receivable.repository.ReceivableRepository;
+import com.matteusmoreno.moto_manager.finance.response.FinanceDetailsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -18,11 +24,13 @@ public class FinanceService {
 
     private final ReceivableRepository receivableRepository;
     private final PayableRepository payableRepository;
+    private final PdfReportGenerator pdfReportGenerator;
 
     @Autowired
-    public FinanceService(ReceivableRepository receivableRepository, PayableRepository payableRepository) {
+    public FinanceService(ReceivableRepository receivableRepository, PayableRepository payableRepository, PdfReportGenerator pdfReportGenerator) {
         this.receivableRepository = receivableRepository;
         this.payableRepository = payableRepository;
+        this.pdfReportGenerator = pdfReportGenerator;
     }
 
     public Finance generateWeeklyReport() {
@@ -42,7 +50,7 @@ public class FinanceService {
 
         BigDecimal profitOrLoss = totalReceivables.subtract(totalPayables);
 
-        return Finance.builder()
+        Finance finance = Finance.builder()
                 .reportName("Weekly Financial Report")
                 .reportDate(LocalDate.now())
                 .receivables(receivables)
@@ -51,6 +59,10 @@ public class FinanceService {
                 .totalPayables(totalPayables)
                 .profitOrLoss(profitOrLoss)
                 .build();
+
+        generateAndSavePdfReport(finance, "weekly-report-");
+
+        return finance;
     }
 
     public Finance generateMonthlyReport(Integer year, Integer month) {
@@ -70,7 +82,7 @@ public class FinanceService {
 
         BigDecimal profitOrLoss = totalReceivables.subtract(totalPayables);
 
-        return Finance.builder()
+        Finance finance = Finance.builder()
                 .reportName("Monthly Financial Report")
                 .reportDate(LocalDate.now())
                 .receivables(receivables)
@@ -79,6 +91,10 @@ public class FinanceService {
                 .totalPayables(totalPayables)
                 .profitOrLoss(profitOrLoss)
                 .build();
+
+        generateAndSavePdfReport(finance, "monthly-report-");
+
+        return finance;
     }
 
     @Transactional
@@ -99,7 +115,7 @@ public class FinanceService {
 
         BigDecimal profitOrLoss = totalReceivables.subtract(totalPayables);
 
-        return Finance.builder()
+        Finance finance = Finance.builder()
                 .reportName("Yearly Financial Report")
                 .reportDate(LocalDate.now())
                 .receivables(receivables)
@@ -108,5 +124,19 @@ public class FinanceService {
                 .totalPayables(totalPayables)
                 .profitOrLoss(profitOrLoss)
                 .build();
+
+        generateAndSavePdfReport(finance, "yearly-report-");
+
+        return finance;
+    }
+
+
+    private void generateAndSavePdfReport(Finance finance, String fileName) {
+        FinanceDetailsResponse financeDetails = new FinanceDetailsResponse(finance);
+        try {
+            pdfReportGenerator.generateReportPdf(financeDetails, fileName + LocalDateTime.now() + ".pdf");
+        } catch (IOException | DocumentException e) {
+            throw new PdfReportGenerationException("Error generating PDF report");
+        }
     }
 }

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/finance")
 public class FinanceController {
@@ -20,7 +22,7 @@ public class FinanceController {
     }
 
     @GetMapping("/weekly-report")
-    public ResponseEntity<FinanceDetailsResponse> weeklyReport() {
+    public ResponseEntity<FinanceDetailsResponse> weeklyReport() throws IOException {
         Finance finance = financeService.generateWeeklyReport();
         return ResponseEntity.ok(new FinanceDetailsResponse(finance));
     }
@@ -35,5 +37,7 @@ public class FinanceController {
     public ResponseEntity<FinanceDetailsResponse> yearlyReport(@RequestParam Integer year) {
         Finance finance = financeService.generateYearlyReport(year);
         return ResponseEntity.ok(new FinanceDetailsResponse(finance));
+
+
     }
 }
