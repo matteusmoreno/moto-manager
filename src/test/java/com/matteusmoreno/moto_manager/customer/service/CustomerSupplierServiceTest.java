@@ -84,7 +84,7 @@ class CustomerSupplierServiceTest {
         customerId = UUID.randomUUID();
         motorcycleId = UUID.randomUUID();
         address = new Address(1L, "28994-675", "Street", "Neighborhood", "City", "State", "21", "Casa", LocalDateTime.now());
-        customer = new Customer(customerId, "Name", "email@email.com", LocalDate.of(1990, 8, 28), 33, "(99)999999999", new ArrayList<>(), new ArrayList<>(), LocalDateTime.now(), null, null, true);
+        customer = new Customer(customerId, "Name", "email@email.com", LocalDate.of(1990, 8, 28), Period.between(LocalDate.of(1990, 8, 28), LocalDate.now()).getYears(), "(99)999999999", new ArrayList<>(), new ArrayList<>(), LocalDateTime.now(), null, null, true);
 
         customer.getAddresses().add(address);
 
