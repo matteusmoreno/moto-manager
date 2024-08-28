@@ -10,9 +10,12 @@ import com.matteusmoreno.moto_manager.finance.receivable.entity.Receivable;
 import com.matteusmoreno.moto_manager.finance.receivable.repository.ReceivableRepository;
 import com.matteusmoreno.moto_manager.finance.response.FinanceDetailsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -131,12 +134,20 @@ public class FinanceService {
     }
 
 
-    private void generateAndSavePdfReport(Finance finance, String fileName) {
+    private String generateAndSavePdfReport(Finance finance, String fileName) {
         FinanceDetailsResponse financeDetails = new FinanceDetailsResponse(finance);
+        String outputPath = System.getProperty("java.io.tmpdir") + "/" + fileName + LocalDateTime.now() + ".pdf";
         try {
-            pdfReportGenerator.generateReportPdf(financeDetails, fileName + LocalDateTime.now() + ".pdf");
+            pdfReportGenerator.generateReportPdf(financeDetails, outputPath);
+            return outputPath;
         } catch (IOException | DocumentException e) {
             throw new PdfReportGenerationException("Error generating PDF report");
         }
+    }
+
+    public Resource generateAndGetPdfReport(Finance finance, String fileName) {
+        String pdfPath = generateAndSavePdfReport(finance, fileName);
+        File file = new File(pdfPath);
+        return new FileSystemResource(file);
     }
 }
