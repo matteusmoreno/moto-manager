@@ -6,6 +6,7 @@ import com.matteusmoreno.moto_manager.finance.entity.Finance;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,6 +22,12 @@ public class FinanceController {
     @GetMapping("/weekly-report")
     public ResponseEntity<FinanceDetailsResponse> weeklyReport() {
         Finance finance = financeService.generateWeeklyReport();
+        return ResponseEntity.ok(new FinanceDetailsResponse(finance));
+    }
+
+    @GetMapping("/monthly-report")
+    public ResponseEntity<FinanceDetailsResponse> monthlyReport(@RequestParam Integer year, @RequestParam Integer month) {
+        Finance finance = financeService.generateMonthlyReport(year, month);
         return ResponseEntity.ok(new FinanceDetailsResponse(finance));
     }
 }

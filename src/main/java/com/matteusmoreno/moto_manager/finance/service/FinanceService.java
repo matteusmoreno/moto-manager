@@ -25,7 +25,6 @@ public class FinanceService {
         this.payableRepository = payableRepository;
     }
 
-    @Transactional
     public Finance generateWeeklyReport() {
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusDays(6);
@@ -45,6 +44,34 @@ public class FinanceService {
 
         return Finance.builder()
                 .reportName("Weekly Financial Report")
+                .reportDate(LocalDate.now())
+                .receivables(receivables)
+                .payables(payables)
+                .totalReceivables(totalReceivables)
+                .totalPayables(totalPayables)
+                .profitOrLoss(profitOrLoss)
+                .build();
+    }
+
+    public Finance generateMonthlyReport(Integer year, Integer month) {
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = LocalDate.of(year, month, startDate.lengthOfMonth());
+
+        List<Receivable> receivables = receivableRepository.findReceivablesWithinDateRange(startDate, endDate);
+        List<Payable> payables = payableRepository.findPayablesWithinDateRange(startDate, endDate);
+
+        BigDecimal totalReceivables = receivables.stream()
+                .map(Receivable::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalPayables = payables.stream()
+                .map(Payable::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal profitOrLoss = totalReceivables.subtract(totalPayables);
+
+        return Finance.builder()
+                .reportName("Monthly Financial Report")
                 .reportDate(LocalDate.now())
                 .receivables(receivables)
                 .payables(payables)
