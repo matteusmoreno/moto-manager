@@ -30,4 +30,10 @@ public class FinanceController {
         Finance finance = financeService.generateMonthlyReport(year, month);
         return ResponseEntity.ok(new FinanceDetailsResponse(finance));
     }
+
+    @GetMapping("/yearly-report")
+    public ResponseEntity<FinanceDetailsResponse> yearlyReport(@RequestParam Integer year) {
+        Finance finance = financeService.generateYearlyReport(year);
+        return ResponseEntity.ok(new FinanceDetailsResponse(finance));
+    }
 }

@@ -80,4 +80,33 @@ public class FinanceService {
                 .profitOrLoss(profitOrLoss)
                 .build();
     }
+
+    @Transactional
+    public Finance generateYearlyReport(Integer year) {
+        LocalDate startDate = LocalDate.of(year, 1, 1);
+        LocalDate endDate = LocalDate.of(year, 12, 31);
+
+        List<Receivable> receivables = receivableRepository.findReceivablesWithinDateRange(startDate, endDate);
+        List<Payable> payables = payableRepository.findPayablesWithinDateRange(startDate, endDate);
+
+        BigDecimal totalReceivables = receivables.stream()
+                .map(Receivable::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalPayables = payables.stream()
+                .map(Payable::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal profitOrLoss = totalReceivables.subtract(totalPayables);
+
+        return Finance.builder()
+                .reportName("Yearly Financial Report")
+                .reportDate(LocalDate.now())
+                .receivables(receivables)
+                .payables(payables)
+                .totalReceivables(totalReceivables)
+                .totalPayables(totalPayables)
+                .profitOrLoss(profitOrLoss)
+                .build();
+    }
 }
