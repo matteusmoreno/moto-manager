@@ -1,13 +1,12 @@
 package com.matteusmoreno.moto_manager.employee.service;
 
-import com.matteusmoreno.moto_manager.address.service.AddressService;
 import com.matteusmoreno.moto_manager.address.entity.Address;
-import com.matteusmoreno.moto_manager.client.email_sender.employee_request.CreateEmailEmployeeRequest;
+import com.matteusmoreno.moto_manager.address.service.AddressService;
 import com.matteusmoreno.moto_manager.client.email_sender.MailSenderClient;
+import com.matteusmoreno.moto_manager.client.email_sender.employee_request.CreateEmailEmployeeRequest;
 import com.matteusmoreno.moto_manager.client.email_sender.employee_request.EnableAndDisableEmailEmployeeRequest;
 import com.matteusmoreno.moto_manager.client.email_sender.employee_request.UpdateEmailEmployeeRequest;
 import com.matteusmoreno.moto_manager.employee.entity.Employee;
-import com.matteusmoreno.moto_manager.employee.mapper.EmployeeMapper;
 import com.matteusmoreno.moto_manager.employee.repository.EmployeeRepository;
 import com.matteusmoreno.moto_manager.employee.request.CreateEmployeeRequest;
 import com.matteusmoreno.moto_manager.employee.request.UpdateEmployeeRequest;
@@ -16,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,25 +28,39 @@ import java.util.UUID;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final EmployeeMapper employeeMapper;
     private final AddressService addressService;
     private final MailSenderClient mailSenderClient;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, AddressService addressService, MailSenderClient mailSenderClient) {
+    public EmployeeService(EmployeeRepository employeeRepository, AddressService addressService, MailSenderClient mailSenderClient, BCryptPasswordEncoder passwordEncoder) {
         this.employeeRepository = employeeRepository;
-        this.employeeMapper = employeeMapper;
         this.addressService = addressService;
         this.mailSenderClient = mailSenderClient;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
     public Employee createEmployee(CreateEmployeeRequest request) {
         Address address = addressService.createAddress(request.zipcode(), request.number(), request.complement());
-        Employee employee = employeeMapper.mapToEmployeeForCreation(request, address);
+        Employee employee = Employee.builder()
+                .username(request.username())
+                .password(passwordEncoder.encode(request.password()))
+                .name(request.name())
+                .email(request.email())
+                .phone(request.phone())
+                .birthDate(request.birthDate())
+                .age(Period.between(request.birthDate(), LocalDate.now()).getYears())
+                .cpf(request.cpf())
+                .role(request.role())
+                .address(address)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(null)
+                .deletedAt(null)
+                .active(true)
+                .build();
 
         employeeRepository.save(employee);
-        mailSenderClient.employeeCreationEmail(new CreateEmailEmployeeRequest(employee, request));
         return employee;
     }
 
