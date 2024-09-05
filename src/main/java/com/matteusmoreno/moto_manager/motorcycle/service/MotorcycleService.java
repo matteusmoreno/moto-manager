@@ -2,7 +2,6 @@ package com.matteusmoreno.moto_manager.motorcycle.service;
 
 import com.matteusmoreno.moto_manager.exception.MotorcycleAlreadyExistsException;
 import com.matteusmoreno.moto_manager.motorcycle.entity.Motorcycle;
-import com.matteusmoreno.moto_manager.motorcycle.mapper.MotorcycleMapper;
 import com.matteusmoreno.moto_manager.motorcycle.repository.MotorcycleRepository;
 import com.matteusmoreno.moto_manager.motorcycle.request.CreateMotorcycleRequest;
 import com.matteusmoreno.moto_manager.motorcycle.request.UpdateMotorcycleRequest;
@@ -21,19 +20,27 @@ import java.util.UUID;
 public class MotorcycleService {
 
     private final MotorcycleRepository motorcycleRepository;
-    private final MotorcycleMapper motorcycleMapper;
 
     @Autowired
-    public MotorcycleService(MotorcycleRepository motorcycleRepository, MotorcycleMapper motorcycleMapper) {
+    public MotorcycleService(MotorcycleRepository motorcycleRepository) {
         this.motorcycleRepository = motorcycleRepository;
-        this.motorcycleMapper = motorcycleMapper;
     }
 
     @Transactional
     public Motorcycle createMotorcycle(CreateMotorcycleRequest request) {
         if (motorcycleRepository.existsByPlate(request.plate())) throw new MotorcycleAlreadyExistsException();
 
-        Motorcycle motorcycle = motorcycleMapper.mapToMotorcycleForCreation(request);
+        Motorcycle motorcycle = Motorcycle.builder()
+                .brand(request.brand())
+                .model(request.model().toUpperCase())
+                .color(request.color())
+                .plate(request.plate().toUpperCase().replaceAll("\\s+", ""))
+                .year(request.year())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(null)
+                .deletedAt(null)
+                .active(true)
+                .build();
 
         motorcycleRepository.save(motorcycle);
         return motorcycle;

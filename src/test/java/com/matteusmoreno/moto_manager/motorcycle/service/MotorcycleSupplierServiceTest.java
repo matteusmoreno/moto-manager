@@ -1,12 +1,9 @@
 package com.matteusmoreno.moto_manager.motorcycle.service;
 
-import com.matteusmoreno.moto_manager.customer.entity.Customer;
-import com.matteusmoreno.moto_manager.customer.response.CustomerDetailsResponse;
 import com.matteusmoreno.moto_manager.exception.MotorcycleAlreadyExistsException;
 import com.matteusmoreno.moto_manager.motorcycle.constant.MotorcycleBrand;
 import com.matteusmoreno.moto_manager.motorcycle.constant.MotorcycleColor;
 import com.matteusmoreno.moto_manager.motorcycle.entity.Motorcycle;
-import com.matteusmoreno.moto_manager.motorcycle.mapper.MotorcycleMapper;
 import com.matteusmoreno.moto_manager.motorcycle.repository.MotorcycleRepository;
 import com.matteusmoreno.moto_manager.motorcycle.request.CreateMotorcycleRequest;
 import com.matteusmoreno.moto_manager.motorcycle.request.UpdateMotorcycleRequest;
@@ -22,9 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,9 +34,6 @@ class MotorcycleSupplierServiceTest {
     @Mock
     private MotorcycleRepository motorcycleRepository;
 
-    @Mock
-    private MotorcycleMapper motorcycleMapper;
-
     @InjectMocks
     private MotorcycleService motorcycleService;
 
@@ -51,22 +43,16 @@ class MotorcycleSupplierServiceTest {
         CreateMotorcycleRequest request = new CreateMotorcycleRequest(MotorcycleBrand.HONDA, "Biz 100",
                 MotorcycleColor.RED, "FRP7898", "2010/2011");
 
-        Motorcycle motorcycle = new Motorcycle(UUID.randomUUID(), MotorcycleBrand.HONDA, "Biz 100", MotorcycleColor.RED,
-                "FRP7898", "2010/2011", null, LocalDateTime.now(), null, null, true);
-
-        when(motorcycleMapper.mapToMotorcycleForCreation(request)).thenReturn(motorcycle);
         when(motorcycleRepository.existsByPlate(request.plate())).thenReturn(false);
 
         Motorcycle result = motorcycleService.createMotorcycle(request);
 
         verify(motorcycleRepository, times(1)).existsByPlate(request.plate());
-        verify(motorcycleMapper, times(1)).mapToMotorcycleForCreation(request);
         verify(motorcycleRepository, times(1)).save(result);
 
-        assertNotNull(result.getId());
         assertEquals(request.brand(), result.getBrand());
         assertEquals(request.color(), result.getColor());
-        assertEquals(request.model(), result.getModel());
+        assertEquals(request.model().toUpperCase(), result.getModel());
         assertEquals(request.plate(), result.getPlate());
         assertEquals(request.year(), result.getYear());
         assertNull(result.getCustomer());
@@ -87,7 +73,6 @@ class MotorcycleSupplierServiceTest {
         assertThrows(MotorcycleAlreadyExistsException.class, () -> motorcycleService.createMotorcycle(request));
 
         verify(motorcycleRepository, times(1)).existsByPlate(request.plate());
-        verify(motorcycleMapper, times(0)).mapToMotorcycleForCreation(request);
         verify(motorcycleRepository, times(0)).save(any());
 
     }
