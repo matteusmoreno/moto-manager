@@ -4,12 +4,9 @@ import com.matteusmoreno.moto_manager.supplier.entity.Supplier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
-@ExtendWith(MockitoExtension.class)
 @DisplayName("Supplier Details Response Tests")
 class SupplierDetailsResponseTest {
 

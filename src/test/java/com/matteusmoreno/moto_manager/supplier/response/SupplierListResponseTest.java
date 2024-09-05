@@ -3,14 +3,12 @@ package com.matteusmoreno.moto_manager.supplier.response;
 import com.matteusmoreno.moto_manager.supplier.entity.Supplier;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(MockitoExtension.class)
 @DisplayName("Supplier List Response Tests")
 class SupplierListResponseTest {
 
