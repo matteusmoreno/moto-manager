@@ -1,9 +1,8 @@
 package com.matteusmoreno.moto_manager.product.service;
 
-import com.matteusmoreno.moto_manager.product.entity.Product;
 import com.matteusmoreno.moto_manager.exception.InsufficientProductQuantityException;
 import com.matteusmoreno.moto_manager.exception.ProductAlreadyExistsException;
-import com.matteusmoreno.moto_manager.product.mapper.ProductMapper;
+import com.matteusmoreno.moto_manager.product.entity.Product;
 import com.matteusmoreno.moto_manager.product.repository.ProductRepository;
 import com.matteusmoreno.moto_manager.product.request.CreateProductRequest;
 import com.matteusmoreno.moto_manager.product.request.ProductQuantityUpdateRequest;
@@ -22,12 +21,10 @@ import java.time.LocalDateTime;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ProductMapper productMapper;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, ProductMapper productBuilder) {
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.productMapper = productBuilder;
     }
 
     @Transactional
@@ -37,7 +34,15 @@ public class ProductService {
             throw new ProductAlreadyExistsException();
         }
 
-        Product product = productMapper.mapToProductForCreation(request);
+        Product product = Product.builder()
+                .name(request.name().toUpperCase())
+                .description(request.description())
+                .manufacturer(request.manufacturer().toUpperCase())
+                .price(request.price())
+                .quantity(request.quantity())
+                .createdAt(LocalDateTime.now())
+                .active(true)
+                .build();
         productRepository.save(product);
 
         return product;

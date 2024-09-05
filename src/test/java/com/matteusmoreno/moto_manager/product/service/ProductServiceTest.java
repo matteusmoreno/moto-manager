@@ -3,7 +3,6 @@ package com.matteusmoreno.moto_manager.product.service;
 import com.matteusmoreno.moto_manager.exception.InsufficientProductQuantityException;
 import com.matteusmoreno.moto_manager.exception.ProductAlreadyExistsException;
 import com.matteusmoreno.moto_manager.product.entity.Product;
-import com.matteusmoreno.moto_manager.product.mapper.ProductMapper;
 import com.matteusmoreno.moto_manager.product.repository.ProductRepository;
 import com.matteusmoreno.moto_manager.product.request.CreateProductRequest;
 import com.matteusmoreno.moto_manager.product.request.ProductQuantityUpdateRequest;
@@ -36,9 +35,6 @@ class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
-    @Mock
-    private ProductMapper productMapper;
-
     @InjectMocks
     private ProductService productService;
 
@@ -66,12 +62,9 @@ class ProductServiceTest {
     void shouldCreateANewProductSuccessfully() {
 
         when(productRepository.existsByNameAndManufacturerIgnoreCase(createRequest.name(), createRequest.manufacturer())).thenReturn(false);
-        when(productMapper.mapToProductForCreation(createRequest)).thenReturn(product);
-
         Product result = productService.createProduct(createRequest);
 
         verify(productRepository, times(1)).existsByNameAndManufacturerIgnoreCase(createRequest.name(), createRequest.manufacturer());
-        verify(productMapper, times(1)).mapToProductForCreation(createRequest);
         verify(productRepository, times(1)).save(result);
 
         assertEquals(createRequest.name().toUpperCase(), result.getName());
