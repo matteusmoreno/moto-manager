@@ -5,11 +5,9 @@ import com.matteusmoreno.moto_manager.address.repository.AddressRepository;
 import com.matteusmoreno.moto_manager.address.request.AddressCustomerRequest;
 import com.matteusmoreno.moto_manager.address.service.AddressService;
 import com.matteusmoreno.moto_manager.client.email_sender.MailSenderClient;
-import com.matteusmoreno.moto_manager.client.email_sender.customer_request.CreateEmailCustomerRequest;
 import com.matteusmoreno.moto_manager.client.email_sender.customer_request.EnableAndDisableEmailCustomerRequest;
 import com.matteusmoreno.moto_manager.client.email_sender.customer_request.UpdateEmailCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.entity.Customer;
-import com.matteusmoreno.moto_manager.customer.mapper.CustomerMapper;
 import com.matteusmoreno.moto_manager.customer.repository.CustomerRepository;
 import com.matteusmoreno.moto_manager.customer.request.CreateCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.request.MotorcycleCustomerRequest;
@@ -24,8 +22,6 @@ import com.matteusmoreno.moto_manager.motorcycle.constant.MotorcycleBrand;
 import com.matteusmoreno.moto_manager.motorcycle.constant.MotorcycleColor;
 import com.matteusmoreno.moto_manager.motorcycle.entity.Motorcycle;
 import com.matteusmoreno.moto_manager.motorcycle.repository.MotorcycleRepository;
-import com.matteusmoreno.moto_manager.product.entity.Product;
-import com.matteusmoreno.moto_manager.product.response.ProductDetailsResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -52,9 +48,6 @@ class CustomerSupplierServiceTest {
 
     @Mock
     private CustomerRepository customerRepository;
-
-    @Mock
-    private CustomerMapper customerMapper;
 
     @Mock
     private AddressService addressService;
@@ -98,12 +91,10 @@ class CustomerSupplierServiceTest {
     void shouldCreateANewCustomerSuccessfully() {
 
         when(addressService.createAddress(createRequest.zipcode(), createRequest.number(), createRequest.complement())).thenReturn(address);
-        when(customerMapper.mapToCustomerForCreation(createRequest, address)).thenReturn(customer);
 
         Customer result = customerService.createCustomer(createRequest);
 
         verify(addressService, times(1)).createAddress(createRequest.zipcode(), createRequest.number(), createRequest.complement());
-        verify(customerMapper, times(1)).mapToCustomerForCreation(createRequest, address);
         verify(customerRepository, times(1)).save(result);
 
         assertEquals(createRequest.name(), result.getName());
@@ -112,7 +103,7 @@ class CustomerSupplierServiceTest {
         assertEquals(Period.between(createRequest.birthDate(), LocalDate.now()).getYears(), result.getAge());
         assertEquals(createRequest.phone(), result.getPhone());
         assertEquals(address, result.getAddresses().get(0));
-        assertEquals(new ArrayList<>(), result.getMotorcycles());
+        assertNull(result.getMotorcycles());
         assertNotNull(result.getCreatedAt());
         assertNull(result.getUpdatedAt());
         assertNull(result.getDeletedAt());
