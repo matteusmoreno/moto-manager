@@ -35,8 +35,23 @@ services:
     env_file:
       - env/application-properties.env
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"     # Porta padrão para o RabbitMQ
+      - "15672:15672"   # Porta para o painel de administração
+    networks:
+      - moto_manager_network
+    env_file:
+      - env/rabbitmq.env
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+
 volumes:
   mysql_data:
+  rabbitmq_data:
 
 networks:
   moto_manager_network:
