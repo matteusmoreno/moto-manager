@@ -3,10 +3,9 @@ package com.matteusmoreno.moto_manager.employee.service;
 import com.matteusmoreno.moto_manager.address.entity.Address;
 import com.matteusmoreno.moto_manager.address.response.AddressDetailsResponse;
 import com.matteusmoreno.moto_manager.address.service.AddressService;
-import com.matteusmoreno.moto_manager.client.email_sender.MailSenderClient;
-import com.matteusmoreno.moto_manager.client.email_sender.employee_request.CreateEmailEmployeeRequest;
 import com.matteusmoreno.moto_manager.employee.constant.EmployeeRole;
 import com.matteusmoreno.moto_manager.employee.entity.Employee;
+import com.matteusmoreno.moto_manager.employee.producer.EmployeeProducer;
 import com.matteusmoreno.moto_manager.employee.repository.EmployeeRepository;
 import com.matteusmoreno.moto_manager.employee.request.CreateEmployeeRequest;
 import com.matteusmoreno.moto_manager.employee.request.UpdateEmployeeRequest;
@@ -48,7 +47,7 @@ class EmployeeSupplierServiceTest {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Mock
-    private MailSenderClient mailSenderClient;
+    private EmployeeProducer employeeProducer;
 
     @InjectMocks
     private EmployeeService employeeService;
@@ -80,6 +79,7 @@ class EmployeeSupplierServiceTest {
 
         verify(addressService, times(1)).createAddress(request.zipcode(), request.number(), request.complement());
         verify(employeeRepository, times(1)).save(result);
+        verify(employeeProducer, times(1)).publishCreateEmployeeEmail(result, request);
 
         assertAll(
                 () -> assertEquals(request.username(), result.getUsername()),
@@ -142,6 +142,7 @@ class EmployeeSupplierServiceTest {
 
         verify(employeeRepository, times(1)).findById(employeeId);
         verify(employeeRepository, times(1)).save(result);
+        verify(employeeProducer, times(1)).publishUpdateEmployeeEmail(result);
 
         assertEquals(employeeId, result.getId());
         assertEquals(employee.getUsername(), result.getUsername());
@@ -178,6 +179,7 @@ class EmployeeSupplierServiceTest {
 
         verify(employeeRepository, times(1)).findById(employeeId);
         verify(employeeRepository, times(1)).save(employee);
+        verify(employeeProducer, times(1)).publishDisableEmployeeEmail(employee);
 
         assertFalse(employee.getActive());
         assertNotNull(employee.getDeletedAt());
@@ -192,6 +194,7 @@ class EmployeeSupplierServiceTest {
 
         verify(employeeRepository, times(1)).findById(employeeId);
         verify(employeeRepository, times(1)).save(employee);
+        verify(employeeProducer, times(1)).publishEnableEmployeeEmail(employee);
 
         assertTrue(result.getActive());
         assertNotNull(result.getUpdatedAt());

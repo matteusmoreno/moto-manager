@@ -4,9 +4,9 @@ import com.matteusmoreno.moto_manager.address.entity.Address;
 import com.matteusmoreno.moto_manager.address.repository.AddressRepository;
 import com.matteusmoreno.moto_manager.address.request.AddressCustomerRequest;
 import com.matteusmoreno.moto_manager.address.service.AddressService;
-import com.matteusmoreno.moto_manager.client.email_sender.MailSenderClient;
-import com.matteusmoreno.moto_manager.client.email_sender.customer_request.EnableAndDisableEmailCustomerRequest;
-import com.matteusmoreno.moto_manager.client.email_sender.customer_request.UpdateEmailCustomerRequest;
+import com.matteusmoreno.moto_manager.customer.producer.CustomerProducer;
+import com.matteusmoreno.moto_manager.customer.producer.customer_request.EnableAndDisableEmailCustomerRequest;
+import com.matteusmoreno.moto_manager.customer.producer.customer_request.UpdateEmailCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.entity.Customer;
 import com.matteusmoreno.moto_manager.customer.repository.CustomerRepository;
 import com.matteusmoreno.moto_manager.customer.request.CreateCustomerRequest;
@@ -59,7 +59,7 @@ class CustomerSupplierServiceTest {
     private AddressRepository addressRepository;
 
     @Mock
-    private MailSenderClient mailSenderClient;
+    private CustomerProducer customerProducer;
 
     @InjectMocks
     private CustomerService customerService;
@@ -96,6 +96,7 @@ class CustomerSupplierServiceTest {
 
         verify(addressService, times(1)).createAddress(createRequest.zipcode(), createRequest.number(), createRequest.complement());
         verify(customerRepository, times(1)).save(result);
+        verify(customerProducer, times(1)).publishCreateCustomerEmail(result);
 
         assertEquals(createRequest.name(), result.getName());
         assertEquals(createRequest.email(), result.getEmail());
@@ -149,10 +150,9 @@ class CustomerSupplierServiceTest {
         Customer result = customerService.updateCustomer(updateRequest);
 
 
-        UpdateEmailCustomerRequest expectedRequest = new UpdateEmailCustomerRequest(customer);
-        verify(mailSenderClient, times(1)).customerUpdateEmail(expectedRequest);
         verify(customerRepository, times(1)).findById(updateRequest.id());
         verify(customerRepository, times(1)).save(result);
+        verify(customerProducer, times(1)).publishUpdateCustomerEmail(result);
 
         assertEquals(updateRequest.name(), result.getName());
         assertEquals(updateRequest.email(), result.getEmail());
@@ -170,10 +170,9 @@ class CustomerSupplierServiceTest {
 
         customerService.disableCustomer(customerId);
 
-        EnableAndDisableEmailCustomerRequest expectedRequest = new EnableAndDisableEmailCustomerRequest(customer);
-        verify(mailSenderClient, times(1)).customerDisableEmail(expectedRequest);
         verify(customerRepository, times(1)).findById(customerId);
         verify(customerRepository, times(1)).save(customer);
+        verify(customerProducer, times(1)).publishDisableCustomerEmail(customer);
 
         assertFalse(customer.getActive());
         assertNotNull(customer.getDeletedAt());
@@ -189,6 +188,7 @@ class CustomerSupplierServiceTest {
 
         verify(customerRepository, times(1)).findById(customerId);
         verify(customerRepository, times(1)).save(result);
+        verify(customerProducer, times(1)).publishEnableCustomerEmail(result);
 
         assertTrue(result.getActive());
         assertNull(result.getDeletedAt());

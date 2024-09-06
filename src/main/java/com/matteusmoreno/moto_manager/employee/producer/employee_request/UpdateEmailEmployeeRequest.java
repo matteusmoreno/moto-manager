@@ -1,16 +1,15 @@
-package com.matteusmoreno.moto_manager.client.email_sender.employee_request;
+package com.matteusmoreno.moto_manager.employee.producer.employee_request;
 
 import com.matteusmoreno.moto_manager.employee.entity.Employee;
-import com.matteusmoreno.moto_manager.employee.request.CreateEmployeeRequest;
 
-public record CreateEmailEmployeeRequest(
+public record UpdateEmailEmployeeRequest(
         String to,
         String id,
         String employeeName,
         String username,
-        String password,
         String phone,
         String birthDate,
+        String age,
         String cpf,
         String role,
         String street,
@@ -21,15 +20,15 @@ public record CreateEmailEmployeeRequest(
         String zipcode,
         String complement) {
 
-    public CreateEmailEmployeeRequest(Employee employee, CreateEmployeeRequest request) {
+    public UpdateEmailEmployeeRequest(Employee employee) {
         this(
                 employee.getEmail(),
                 employee.getId().toString(),
                 employee.getName(),
                 employee.getUsername(),
-                request.password(),
                 employee.getPhone(),
                 employee.getBirthDate().toString(),
+                employee.getAge().toString(),
                 employee.getCpf(),
                 employee.getRole().toString(),
                 employee.getAddress().getStreet(),
@@ -41,4 +40,5 @@ public record CreateEmailEmployeeRequest(
                 employee.getAddress().getComplement()
         );
     }
+
 }

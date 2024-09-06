@@ -1,17 +1,19 @@
-package com.matteusmoreno.moto_manager.client.email_sender.customer_request;
+package com.matteusmoreno.moto_manager.customer.producer.customer_request;
 
 import com.matteusmoreno.moto_manager.customer.entity.Customer;
 
-public record EnableAndDisableEmailCustomerRequest(
+public record UpdateEmailCustomerRequest(
         String to,
         String id,
         String customerName,
         String email,
         String birthDate,
         String age,
-        String phone) {
+        String phone,
+        String createdAt,
+        String updatedAt) {
 
-    public EnableAndDisableEmailCustomerRequest(Customer customer) {
+    public UpdateEmailCustomerRequest(Customer customer) {
         this(
                 customer.getEmail(),
                 customer.getId().toString(),
@@ -19,7 +21,9 @@ public record EnableAndDisableEmailCustomerRequest(
                 customer.getEmail(),
                 customer.getBirthDate().toString(),
                 customer.getAge().toString(),
-                customer.getPhone()
+                customer.getPhone(),
+                customer.getCreatedAt().toLocalDate().toString(),
+                customer.getUpdatedAt().toLocalDate().toString()
         );
     }
 }

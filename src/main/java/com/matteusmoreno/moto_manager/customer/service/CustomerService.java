@@ -1,27 +1,23 @@
 package com.matteusmoreno.moto_manager.customer.service;
 
+import com.matteusmoreno.moto_manager.address.entity.Address;
 import com.matteusmoreno.moto_manager.address.repository.AddressRepository;
+import com.matteusmoreno.moto_manager.address.request.AddressCustomerRequest;
 import com.matteusmoreno.moto_manager.address.service.AddressService;
-import com.matteusmoreno.moto_manager.client.email_sender.MailSenderClient;
-import com.matteusmoreno.moto_manager.client.email_sender.customer_request.CreateEmailCustomerRequest;
-import com.matteusmoreno.moto_manager.client.email_sender.customer_request.EnableAndDisableEmailCustomerRequest;
-import com.matteusmoreno.moto_manager.client.email_sender.customer_request.UpdateEmailCustomerRequest;
-import com.matteusmoreno.moto_manager.client.email_sender.employee_request.EnableAndDisableEmailEmployeeRequest;
+import com.matteusmoreno.moto_manager.customer.entity.Customer;
+import com.matteusmoreno.moto_manager.customer.producer.CustomerProducer;
+import com.matteusmoreno.moto_manager.customer.repository.CustomerRepository;
+import com.matteusmoreno.moto_manager.customer.request.CreateCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.request.MotorcycleCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.request.RemoveCustomerAddressRequest;
 import com.matteusmoreno.moto_manager.customer.request.UpdateCustomerRequest;
-import com.matteusmoreno.moto_manager.customer.entity.Customer;
-import com.matteusmoreno.moto_manager.customer.repository.CustomerRepository;
-import com.matteusmoreno.moto_manager.customer.request.CreateCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.response.CustomerDetailsResponse;
-import com.matteusmoreno.moto_manager.address.entity.Address;
-import com.matteusmoreno.moto_manager.exception.AddressNotOwnedByCustomerException;
-import com.matteusmoreno.moto_manager.motorcycle.entity.Motorcycle;
 import com.matteusmoreno.moto_manager.exception.AddressAlreadyAssignedToCustomerException;
+import com.matteusmoreno.moto_manager.exception.AddressNotOwnedByCustomerException;
 import com.matteusmoreno.moto_manager.exception.MotorcycleAlreadyAssignedException;
 import com.matteusmoreno.moto_manager.exception.MotorcycleNotOwnedByCustomerException;
+import com.matteusmoreno.moto_manager.motorcycle.entity.Motorcycle;
 import com.matteusmoreno.moto_manager.motorcycle.repository.MotorcycleRepository;
-import com.matteusmoreno.moto_manager.address.request.AddressCustomerRequest;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,15 +38,15 @@ public class CustomerService {
     private final AddressService addressService;
     private final MotorcycleRepository motorcycleRepository;
     private final AddressRepository addressRepository;
-    private final MailSenderClient mailSenderClient;
+    private final CustomerProducer customerProducer;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, AddressService addressService, MotorcycleRepository motorcycleRepository, AddressRepository addressRepository, MailSenderClient mailSenderClient) {
+    public CustomerService(CustomerRepository customerRepository, AddressService addressService, MotorcycleRepository motorcycleRepository, AddressRepository addressRepository, CustomerProducer customerProducer) {
         this.customerRepository = customerRepository;
         this.addressService = addressService;
         this.motorcycleRepository = motorcycleRepository;
         this.addressRepository = addressRepository;
-        this.mailSenderClient = mailSenderClient;
+        this.customerProducer = customerProducer;
     }
 
     @Transactional
@@ -70,6 +66,7 @@ public class CustomerService {
                 .build();
 
         customerRepository.save(customer);
+        customerProducer.publishCreateCustomerEmail(customer);
 
         return customer;
     }
@@ -92,8 +89,9 @@ public class CustomerService {
         if (request.phone() != null) customer.setPhone(request.phone());
 
         customer.setUpdatedAt(LocalDateTime.now());
+
         customerRepository.save(customer);
-        mailSenderClient.customerUpdateEmail(new UpdateEmailCustomerRequest(customer));
+        customerProducer.publishUpdateCustomerEmail(customer);
 
         return customer;
     }
@@ -105,8 +103,9 @@ public class CustomerService {
 
         customer.setActive(false);
         customer.setDeletedAt(LocalDateTime.now());
+
         customerRepository.save(customer);
-        mailSenderClient.customerDisableEmail(new EnableAndDisableEmailCustomerRequest(customer));
+        customerProducer.publishDisableCustomerEmail(customer);
     }
 
     @Transactional
@@ -117,8 +116,9 @@ public class CustomerService {
         customer.setActive(true);
         customer.setDeletedAt(null);
         customer.setUpdatedAt(LocalDateTime.now());
+
         customerRepository.save(customer);
-        mailSenderClient.customerEnableEmail(new EnableAndDisableEmailCustomerRequest(customer));
+        customerProducer.publishEnableCustomerEmail(customer);
 
         return customer;
     }

@@ -1,4 +1,4 @@
-package com.matteusmoreno.moto_manager.client.email_sender.customer_request;
+package com.matteusmoreno.moto_manager.customer.producer.customer_request;
 
 import com.matteusmoreno.moto_manager.customer.entity.Customer;
 

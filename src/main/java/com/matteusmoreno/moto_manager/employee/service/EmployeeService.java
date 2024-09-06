@@ -2,11 +2,8 @@ package com.matteusmoreno.moto_manager.employee.service;
 
 import com.matteusmoreno.moto_manager.address.entity.Address;
 import com.matteusmoreno.moto_manager.address.service.AddressService;
-import com.matteusmoreno.moto_manager.client.email_sender.MailSenderClient;
-import com.matteusmoreno.moto_manager.client.email_sender.employee_request.CreateEmailEmployeeRequest;
-import com.matteusmoreno.moto_manager.client.email_sender.employee_request.EnableAndDisableEmailEmployeeRequest;
-import com.matteusmoreno.moto_manager.client.email_sender.employee_request.UpdateEmailEmployeeRequest;
 import com.matteusmoreno.moto_manager.employee.entity.Employee;
+import com.matteusmoreno.moto_manager.employee.producer.EmployeeProducer;
 import com.matteusmoreno.moto_manager.employee.repository.EmployeeRepository;
 import com.matteusmoreno.moto_manager.employee.request.CreateEmployeeRequest;
 import com.matteusmoreno.moto_manager.employee.request.UpdateEmployeeRequest;
@@ -29,15 +26,15 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final AddressService addressService;
-    private final MailSenderClient mailSenderClient;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final EmployeeProducer employeeProducer;
 
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, AddressService addressService, MailSenderClient mailSenderClient, BCryptPasswordEncoder passwordEncoder) {
+    public EmployeeService(EmployeeRepository employeeRepository, AddressService addressService, BCryptPasswordEncoder passwordEncoder, EmployeeProducer employeeProducer) {
         this.employeeRepository = employeeRepository;
         this.addressService = addressService;
-        this.mailSenderClient = mailSenderClient;
         this.passwordEncoder = passwordEncoder;
+        this.employeeProducer = employeeProducer;
     }
 
     @Transactional
@@ -61,6 +58,7 @@ public class EmployeeService {
                 .build();
 
         employeeRepository.save(employee);
+        employeeProducer.publishCreateEmployeeEmail(employee, request);
         return employee;
     }
 
@@ -84,8 +82,7 @@ public class EmployeeService {
 
         employee.setUpdatedAt(LocalDateTime.now());
         employeeRepository.save(employee);
-        mailSenderClient.employeeUpdateEmail(new UpdateEmailEmployeeRequest(employee));
-
+        employeeProducer.publishUpdateEmployeeEmail(employee);
         return employee;
     }
 
@@ -97,7 +94,7 @@ public class EmployeeService {
         employee.setActive(false);
         employee.setDeletedAt(LocalDateTime.now());
         employeeRepository.save(employee);
-        mailSenderClient.employeeDisableEmail(new EnableAndDisableEmailEmployeeRequest(employee));
+        employeeProducer.publishDisableEmployeeEmail(employee);
     }
 
     @Transactional
@@ -109,8 +106,7 @@ public class EmployeeService {
         employee.setUpdatedAt(LocalDateTime.now());
         employee.setDeletedAt(null);
         employeeRepository.save(employee);
-        mailSenderClient.employeeEnableEmail(new EnableAndDisableEmailEmployeeRequest(employee));
-
+        employeeProducer.publishEnableEmployeeEmail(employee);
         return employee;
     }
 }

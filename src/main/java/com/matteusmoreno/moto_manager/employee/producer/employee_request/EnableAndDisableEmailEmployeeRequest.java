@@ -1,4 +1,4 @@
-package com.matteusmoreno.moto_manager.client.email_sender.employee_request;
+package com.matteusmoreno.moto_manager.employee.producer.employee_request;
 
 import com.matteusmoreno.moto_manager.employee.entity.Employee;
 
