@@ -9,10 +9,13 @@
 ![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-%E2%9C%94-brightgreen)
 ![Spring Security](https://img.shields.io/badge/Spring%20Security-%E2%9C%94-brightgreen)
 ![Flyway](https://img.shields.io/badge/Flyway-%E2%9C%94-blue)
+![Lombok](https://img.shields.io/badge/Lombok-%E2%9C%94-blue)
+![Swagger](https://img.shields.io/badge/Swagger-%E2%9C%94-brightgreen)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-orange)
 ![Docker](https://img.shields.io/badge/Docker-%E2%9C%94-blue)
 ![Springdoc OpenAPI](https://img.shields.io/badge/Springdoc%20OpenAPI-2.0.2-blue)
 ![Maven](https://img.shields.io/badge/Maven-%E2%9C%94-green)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-3-orange)
 
 
 ## Estrutura do Projeto
@@ -25,6 +28,7 @@ moto-manager/
 ├── env/
 │   └── application-properties.env
 │   └── mysql.env
+│   └── rabbitmq.env
 ├── src/
 │   ├── main/
 │   │   ├── java/
@@ -61,12 +65,18 @@ Para configurar o ambiente da aplicação, você precisa criar a pasta `env` e o
 1. **Crie a pasta `env`** na raiz do projeto.
 2. **Crie os arquivos de configuração** dentro da pasta `env` com os seguintes nomes e conteúdos:
 
+
    - **`application-properties.env`**: Este arquivo deve conter as variáveis de ambiente para a aplicação Spring Boot.
 
      ```env
      SPRING_DATASOURCE_URL=jdbc:mysql://mysql_db:3306/moto_manager  
      SPRING_DATASOURCE_USERNAME=root  
      SPRING_DATASOURCE_PASSWORD=root
+     
+     jwt.public.key=classpath:public.pem
+     jwt.private.key=classpath:private.pem
+     
+     spring.rabbitmq.addresses=rabbitmq-url
      ```
 
    - **`mysql.env`**: Este arquivo deve conter as variáveis de ambiente para o banco de dados MySQL.
@@ -74,6 +84,13 @@ Para configurar o ambiente da aplicação, você precisa criar a pasta `env` e o
      ```env
      MYSQL_ROOT_PASSWORD=root  
      MYSQL_DATABASE=moto_manager
+     ```
+     
+   - **`rabbitmq.env`**: Este arquivo deve conter as variáveis de ambiente para o RabbitMQ.
+
+     ```env
+     RABBITMQ_DEFAULT_USER=guest 
+     RABBITMQ_DEFAULT_PASS=guest
      ```
 
 #### Gerar Chaves
