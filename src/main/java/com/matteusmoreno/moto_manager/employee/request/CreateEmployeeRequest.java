@@ -3,6 +3,7 @@ package com.matteusmoreno.moto_manager.employee.request;
 import com.matteusmoreno.moto_manager.employee.constant.EmployeeRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
@@ -18,12 +19,14 @@ public record CreateEmployeeRequest(
         String email,
         @Pattern(regexp = "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$", message = "Invalid CPF: XXX.XXX.XXX-XX")
         String cpf,
-        @Pattern(regexp = "^\\(\\d{2}\\)\\d{9}$", message = "Invalid phone format (xx)xxxxxxxxx")
         String phone,
+        @NotNull(message = "Birth date is required")
         LocalDate birthDate,
+        @NotNull(message = "Role is required")
         EmployeeRole role,
         @Pattern(regexp = "^\\d{5}-\\d{3}$", message = "Invalid zipcode format (xxxxx-xxx)")
         String zipcode,
         String number,
         String complement) {
 }
+

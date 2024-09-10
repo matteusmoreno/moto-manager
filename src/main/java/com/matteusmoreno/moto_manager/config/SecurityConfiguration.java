@@ -47,11 +47,11 @@ public class SecurityConfiguration {
                         .requestMatchers("/customers/add-motorcycle").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
                         .requestMatchers("/customers/remove-motorcycle").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
 
-                        .requestMatchers("/employees/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
-                        .requestMatchers("/employees/find-all").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
-                        .requestMatchers("/employees/update").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
-                        .requestMatchers("/employees/disable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
-                        .requestMatchers("/employees/enable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
+                        .requestMatchers("/employees/create").permitAll()      //hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
+                        .requestMatchers("/employees/find-all").permitAll()       //.hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
+                        .requestMatchers("/employees/update").permitAll()        //.hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
+                        .requestMatchers("/employees/disable/**").permitAll()    //.hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
+                        .requestMatchers("/employees/enable/**").permitAll()      //.hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
 
                         .requestMatchers("/motorcycles/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
                         .requestMatchers("/motorcycles/find-all").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")

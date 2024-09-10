@@ -69,8 +69,7 @@ class EmployeeSupplierServiceTest {
     @DisplayName("Should create a new employee successfully")
     void shouldCreateANewEmployeeSuccessfully() {
 
-        CreateEmployeeRequest request = new CreateEmployeeRequest("username", "password", "Employee", "employee@email.com", "(99)999999999", "(99)999999999", LocalDate.of(2000, 2, 10),
-                EmployeeRole.SELLER, "28994-675", "21", "Casa");
+        CreateEmployeeRequest request = new CreateEmployeeRequest("username", "password", "Employee", "employee@email.com", "(99)999999999", "(99)999999999", LocalDate.of(2000, 2, 10), EmployeeRole.SELLER, "28994-675", "21", "Casa");
 
         when(addressService.createAddress(request.zipcode(), request.number(), request.complement())).thenReturn(address);
         when(passwordEncoder.encode(request.password())).thenReturn("EncodedPassword");
