@@ -3,7 +3,7 @@ version: '3.8'
 services:
   mysql_db:
     image: mysql:8.0
-    container_name: mysql_db
+    container_name: database_moto-manager
     env_file:
       - env/mysql.env
     ports:
@@ -37,10 +37,10 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: rabbitmq
+    container_name: rabbitmq_moto-manager
     ports:
-      - "5672:5672"     # Porta padrão para o RabbitMQ
-      - "15672:15672"   # Porta para o painel de administração
+      - "5672:5672"
+      - "15672:15672"
     networks:
       - moto_manager_network
     env_file:
