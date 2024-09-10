@@ -33,19 +33,24 @@ public class SecurityConfiguration {
     @Value("${jwt.private.key}")
     private RSAPrivateKey privateKey;
 
+    private static final String ADMIN = "SCOPE_ADMIN";
+    private static final String MANAGER = "SCOPE_MANAGER";
+    private static final String SELLER = "SCOPE_SELLER";
+    private static final String MECHANIC = "SCOPE_MECHANIC";
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
-                        .requestMatchers("/customers/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
-                        .requestMatchers("/customers/find-all").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
-                        .requestMatchers("/customers/update").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
-                        .requestMatchers("/customers/disable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
-                        .requestMatchers("/customers/enable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
-                        .requestMatchers("/customers/add-motorcycle").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
-                        .requestMatchers("/customers/remove-motorcycle").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
+                        .requestMatchers("/customers/create").hasAnyAuthority(ADMIN, MANAGER, SELLER)
+                        .requestMatchers("/customers/find-all").hasAnyAuthority(ADMIN, MANAGER, SELLER, MECHANIC)
+                        .requestMatchers("/customers/update").hasAnyAuthority(ADMIN, MANAGER, SELLER)
+                        .requestMatchers("/customers/disable/**").hasAnyAuthority(ADMIN, MANAGER, SELLER)
+                        .requestMatchers("/customers/enable/**").hasAnyAuthority(ADMIN, MANAGER, SELLER)
+                        .requestMatchers("/customers/add-motorcycle").hasAnyAuthority(ADMIN, MANAGER, SELLER)
+                        .requestMatchers("/customers/remove-motorcycle").hasAnyAuthority(ADMIN, MANAGER, SELLER)
 
                         .requestMatchers("/employees/create").permitAll()      //hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
                         .requestMatchers("/employees/find-all").permitAll()       //.hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
@@ -53,36 +58,36 @@ public class SecurityConfiguration {
                         .requestMatchers("/employees/disable/**").permitAll()    //.hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
                         .requestMatchers("/employees/enable/**").permitAll()      //.hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
 
-                        .requestMatchers("/motorcycles/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
-                        .requestMatchers("/motorcycles/find-all").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
-                        .requestMatchers("/motorcycles/update").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
-                        .requestMatchers("/motorcycles/disable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
-                        .requestMatchers("/motorcycles/enable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
+                        .requestMatchers("/motorcycles/create").hasAnyAuthority(ADMIN, MANAGER, SELLER, MECHANIC)
+                        .requestMatchers("/motorcycles/find-all").hasAnyAuthority(ADMIN, MANAGER, SELLER, MECHANIC)
+                        .requestMatchers("/motorcycles/update").hasAnyAuthority(ADMIN, MANAGER, SELLER, MECHANIC)
+                        .requestMatchers("/motorcycles/disable/**").hasAnyAuthority(ADMIN, MANAGER, SELLER, MECHANIC)
+                        .requestMatchers("/motorcycles/enable/**").hasAnyAuthority(ADMIN, MANAGER, SELLER, MECHANIC)
 
-                        .requestMatchers("/products/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
-                        .requestMatchers("/products/find-all").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
-                        .requestMatchers("/products/update").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
-                        .requestMatchers("/products/enable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
-                        .requestMatchers("/products/disable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
-                        .requestMatchers("/products/add-product").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
-                        .requestMatchers("/products/remove-product").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER")
+                        .requestMatchers("/products/create").hasAnyAuthority(ADMIN, MANAGER, SELLER)
+                        .requestMatchers("/products/find-all").hasAnyAuthority(ADMIN, MANAGER, SELLER, MECHANIC)
+                        .requestMatchers("/products/update").hasAnyAuthority(ADMIN, MANAGER, SELLER)
+                        .requestMatchers("/products/enable/**").hasAnyAuthority(ADMIN, MANAGER, SELLER)
+                        .requestMatchers("/products/disable/**").hasAnyAuthority(ADMIN, MANAGER, SELLER)
+                        .requestMatchers("/products/add-product").hasAnyAuthority(ADMIN, MANAGER, SELLER)
+                        .requestMatchers("/products/remove-product").hasAnyAuthority(ADMIN, MANAGER, SELLER)
 
-                        .requestMatchers("/service-orders/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
-                        .requestMatchers("/service-orders/start/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
-                        .requestMatchers("/service-orders/complete/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
-                        .requestMatchers("/service-orders/cancel/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
-                        .requestMatchers("/service-orders/update").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER", "SCOPE_SELLER", "SCOPE_MECHANIC")
+                        .requestMatchers("/service-orders/create").hasAnyAuthority(ADMIN, MANAGER, SELLER, MECHANIC)
+                        .requestMatchers("/service-orders/start/**").hasAnyAuthority(ADMIN, MANAGER, SELLER, MECHANIC)
+                        .requestMatchers("/service-orders/complete/**").hasAnyAuthority(ADMIN, MANAGER, SELLER, MECHANIC)
+                        .requestMatchers("/service-orders/cancel/**").hasAnyAuthority(ADMIN, MANAGER, SELLER, MECHANIC)
+                        .requestMatchers("/service-orders/update").hasAnyAuthority(ADMIN, MANAGER, SELLER, MECHANIC)
 
-                        .requestMatchers("/suppliers/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
-                        .requestMatchers("/suppliers/find-all").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
-                        .requestMatchers("/suppliers/update").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
-                        .requestMatchers("/suppliers/disable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
-                        .requestMatchers("/suppliers/enable/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
+                        .requestMatchers("/suppliers/create").hasAnyAuthority(ADMIN, MANAGER)
+                        .requestMatchers("/suppliers/find-all").hasAnyAuthority(ADMIN, MANAGER)
+                        .requestMatchers("/suppliers/update").hasAnyAuthority(ADMIN, MANAGER)
+                        .requestMatchers("/suppliers/disable/**").hasAnyAuthority(ADMIN, MANAGER)
+                        .requestMatchers("/suppliers/enable/**").hasAnyAuthority(ADMIN, MANAGER)
 
-                        .requestMatchers("/payables/create").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
-                        .requestMatchers("/payables/find-all").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
-                        .requestMatchers("/payables/pay/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
-                        .requestMatchers("/payables/cancel/**").hasAnyAuthority("SCOPE_ADMIN", "SCOPE_MANAGER")
+                        .requestMatchers("/payables/create").hasAnyAuthority(ADMIN, MANAGER)
+                        .requestMatchers("/payables/find-all").hasAnyAuthority(ADMIN, MANAGER)
+                        .requestMatchers("/payables/pay/**").hasAnyAuthority(ADMIN, MANAGER)
+                        .requestMatchers("/payables/cancel/**").hasAnyAuthority(ADMIN, MANAGER)
 
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
