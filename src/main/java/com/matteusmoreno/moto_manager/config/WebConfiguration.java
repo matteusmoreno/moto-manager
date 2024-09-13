@@ -10,7 +10,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8000", "http://localhost:8080", "https://moto-manager-forntend.vercel.app", "https://moto-manager-forntend.vercel.app/", "https://moto-manager-forntend.onrender.com", "https://moto-manager.onrender.com")
+                .allowedOrigins("http://localhost:8000", "http://localhost:8080", "https://mango-moss-08608420f.5.azurestaticapps.net")
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .allowCredentials(true);
