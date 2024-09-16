@@ -23,6 +23,13 @@ jobs:
           distribution: 'microsoft'
 
       - name: Build with Maven
+        env:
+          SERVER_PORT: '8080'
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          RABBITMQ_ADDRESS: ${{ secrets.RABBITMQ_ADDRESS }}
         run: mvn clean install
 
       - name: Upload artifact for deployment job
