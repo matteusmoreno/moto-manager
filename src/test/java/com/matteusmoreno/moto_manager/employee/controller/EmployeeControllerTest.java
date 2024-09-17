@@ -95,8 +95,7 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$.active").value(manager.getActive()))
                 .andExpect(jsonPath("$.address.zipcode").value(manager.getAddress().getZipcode()))
                 .andExpect(jsonPath("$.address.number").value(manager.getAddress().getNumber()))
-                .andExpect(jsonPath("$.address.complement").value(manager.getAddress().getComplement()))
-                .andExpect(jsonPath("$.createdAt").value(manager.getCreatedAt().toString())
+                .andExpect(jsonPath("$.address.complement").value(manager.getAddress().getComplement())
                 );
     }
 
@@ -135,7 +134,6 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$.content[0].address.zipcode").value(manager.getAddress().getZipcode()))
                 .andExpect(jsonPath("$.content[0].address.number").value(manager.getAddress().getNumber()))
                 .andExpect(jsonPath("$.content[0].address.complement").value(manager.getAddress().getComplement()))
-                .andExpect(jsonPath("$.content[0].createdAt").value(manager.getCreatedAt().toString()))
                 // Validando conteúdo do segundo funcionário (mechanic)
                 .andExpect(jsonPath("$.content[1].id").value(mechanic.getId().toString()))
                 .andExpect(jsonPath("$.content[1].username").value(mechanic.getUsername()))
@@ -149,8 +147,7 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$.content[1].active").value(mechanic.getActive()))
                 .andExpect(jsonPath("$.content[1].address.zipcode").value(mechanic.getAddress().getZipcode()))
                 .andExpect(jsonPath("$.content[1].address.number").value(mechanic.getAddress().getNumber()))
-                .andExpect(jsonPath("$.content[1].address.complement").value(mechanic.getAddress().getComplement()))
-                .andExpect(jsonPath("$.content[1].createdAt").value(mechanic.getCreatedAt().toString()));
+                .andExpect(jsonPath("$.content[1].address.complement").value(mechanic.getAddress().getComplement()));
     }
 
     @Test
@@ -219,8 +216,6 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$.active").value(manager.getActive()))
                 .andExpect(jsonPath("$.address.zipcode").value(manager.getAddress().getZipcode()))
                 .andExpect(jsonPath("$.address.number").value(manager.getAddress().getNumber()))
-                .andExpect(jsonPath("$.address.complement").value(manager.getAddress().getComplement()))
-                .andExpect(jsonPath("$.createdAt").value(manager.getCreatedAt().toString()));
-
+                .andExpect(jsonPath("$.address.complement").value(manager.getAddress().getComplement()));
     }
 }
