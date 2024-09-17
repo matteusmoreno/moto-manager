@@ -35,7 +35,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Employee Service tests")
-class EmployeeSupplierServiceTest {
+class EmployeeServiceTest {
 
     @Mock
     private EmployeeRepository employeeRepository;
