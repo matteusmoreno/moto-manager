@@ -16,6 +16,7 @@
 ![Springdoc OpenAPI](https://img.shields.io/badge/Springdoc%20OpenAPI-2.0.2-blue)
 ![Maven](https://img.shields.io/badge/Maven-%E2%9C%94-green)
 ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-3-orange)
+![Microsoft Azure](https://img.shields.io/badge/Microsoft%20Azure-%E2%9C%94-blue)
 
 
 ## Estrutura do Projeto
