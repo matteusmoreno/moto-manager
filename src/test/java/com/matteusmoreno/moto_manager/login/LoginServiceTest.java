@@ -19,17 +19,17 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.util.ArrayList;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Login Service Tests")
-class LoginSupplierServiceTest {
+class LoginServiceTest {
 
     @Mock
     private Jwt mockJwt;
@@ -98,6 +98,24 @@ class LoginSupplierServiceTest {
         assertEquals("User or Password is invalid!", exception.getMessage());
     }
 
-    // IMPLEMENTAR TESTE PARA QUANDO O LOGIN FOR COM O ADMIN
+    @Test
+    @DisplayName("Should login correctly when username is admin")
+    void shouldLoginCorrectlyWhenUsernameIsAdmin() {
+        LoginRequest loginRequest = new LoginRequest("admin", "password");
 
+        when(employeeRepository.findByUsername(loginRequest.username())).thenReturn(employee);
+        when(employeeRepository.existsByUsername(loginRequest.username())).thenReturn(true);
+        when(passwordEncoder.matches(loginRequest.password(), employee.getPassword())).thenReturn(true);
+        when(jwtEncoder.encode(any(JwtEncoderParameters.class))).thenReturn(mockJwt);
+        when(mockJwt.getTokenValue()).thenReturn("encoderResult");
+
+        String jwtToken = loginService.login(loginRequest);
+
+        verify(employeeRepository).findByUsername(loginRequest.username());
+        verify(employeeRepository).existsByUsername(loginRequest.username());
+        verify(passwordEncoder).matches(loginRequest.password(), employee.getPassword());
+        verify(jwtEncoder).encode(any(JwtEncoderParameters.class));
+
+        assertNotNull(jwtToken);
+    }
 }
