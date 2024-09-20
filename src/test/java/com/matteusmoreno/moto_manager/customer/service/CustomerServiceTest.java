@@ -5,8 +5,6 @@ import com.matteusmoreno.moto_manager.address.repository.AddressRepository;
 import com.matteusmoreno.moto_manager.address.request.AddressCustomerRequest;
 import com.matteusmoreno.moto_manager.address.service.AddressService;
 import com.matteusmoreno.moto_manager.customer.producer.CustomerProducer;
-import com.matteusmoreno.moto_manager.customer.producer.customer_request.EnableAndDisableEmailCustomerRequest;
-import com.matteusmoreno.moto_manager.customer.producer.customer_request.UpdateEmailCustomerRequest;
 import com.matteusmoreno.moto_manager.customer.entity.Customer;
 import com.matteusmoreno.moto_manager.customer.repository.CustomerRepository;
 import com.matteusmoreno.moto_manager.customer.request.CreateCustomerRequest;
@@ -44,7 +42,7 @@ import static org.mockito.Mockito.*;
 
 @DisplayName("Customer Service Tests")
 @ExtendWith(MockitoExtension.class)
-class CustomerSupplierServiceTest {
+class CustomerServiceTest {
 
     @Mock
     private CustomerRepository customerRepository;
