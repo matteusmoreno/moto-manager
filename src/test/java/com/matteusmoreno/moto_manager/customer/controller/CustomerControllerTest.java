@@ -5,7 +5,6 @@ import com.matteusmoreno.moto_manager.config.SecurityConfiguration;
 import com.matteusmoreno.moto_manager.customer.entity.Customer;
 import com.matteusmoreno.moto_manager.customer.response.CustomerDetailsResponse;
 import com.matteusmoreno.moto_manager.customer.service.CustomerService;
-import com.matteusmoreno.moto_manager.motorcycle.response.MotorcycleDetailsResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
