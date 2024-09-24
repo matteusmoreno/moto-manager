@@ -92,6 +92,10 @@ public class SecurityConfiguration {
                         .requestMatchers("/receivables/find-all").hasAnyAuthority(ADMIN, MANAGER)
                         .requestMatchers("/receivables/pay/**").hasAnyAuthority(ADMIN, MANAGER)
 
+                        .requestMatchers("/finance/weekly-report/download").hasAnyAuthority(ADMIN, MANAGER)
+                        .requestMatchers("/finance/monthly-report").hasAnyAuthority(ADMIN, MANAGER)
+                        .requestMatchers("/finance/yearly-report").hasAnyAuthority(ADMIN, MANAGER)
+
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))

@@ -6,7 +6,6 @@ import com.matteusmoreno.moto_manager.motorcycle.constant.MotorcycleColor;
 import com.matteusmoreno.moto_manager.motorcycle.entity.Motorcycle;
 import com.matteusmoreno.moto_manager.motorcycle.response.MotorcycleDetailsResponse;
 import com.matteusmoreno.moto_manager.motorcycle.service.MotorcycleService;
-import com.matteusmoreno.moto_manager.product.response.ProductDetailsResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
