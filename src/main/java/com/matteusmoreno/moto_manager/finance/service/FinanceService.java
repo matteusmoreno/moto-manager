@@ -134,7 +134,7 @@ public class FinanceService {
     }
 
 
-    private String generateAndSavePdfReport(Finance finance, String fileName) {
+    public String generateAndSavePdfReport(Finance finance, String fileName) {
         FinanceDetailsResponse financeDetails = new FinanceDetailsResponse(finance);
         String outputPath = System.getProperty("java.io.tmpdir") + "/" + fileName + LocalDateTime.now() + ".pdf";
         try {
