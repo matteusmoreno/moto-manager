@@ -89,6 +89,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/payables/pay/**").hasAnyAuthority(ADMIN, MANAGER)
                         .requestMatchers("/payables/cancel/**").hasAnyAuthority(ADMIN, MANAGER)
 
+                        .requestMatchers("/receivables/find-all").hasAnyAuthority(ADMIN, MANAGER)
+                        .requestMatchers("/receivables/pay/**").hasAnyAuthority(ADMIN, MANAGER)
+
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
