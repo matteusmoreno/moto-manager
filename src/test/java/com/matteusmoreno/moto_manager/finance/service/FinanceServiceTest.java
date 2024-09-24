@@ -28,7 +28,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -39,7 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -151,5 +152,15 @@ class FinanceServiceTest {
         doThrow(DocumentException.class).when(pdfReportGenerator).generateReportPdf(any(), any());
 
         assertThrows(PdfReportGenerationException.class, () -> financeService.generateAndSavePdfReport(finance, "report-name-"));
+    }
+
+    @Test
+    @DisplayName("Should generate and get PDF report successfully")
+    void shouldGenerateAndSavePdfReportSuccessfully() {
+        Finance finance = new Finance(10L, "Report Name", LocalDate.now(), List.of(receivable), List.of(payable), BigDecimal.TEN, BigDecimal.TEN, BigDecimal.ZERO);
+
+        Resource result = financeService.generateAndGetPdfReport(finance, finance.getReportName());
+
+        assertNotNull(result);
     }
 }
